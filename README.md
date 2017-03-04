@@ -1,7 +1,9 @@
 # 3dsFB
 A (simple) homebrew 3ds File Browser written in C
 
-Currently all debug info outputs to the lower screen
+Currently all debug info outputs to the lower screen, printing all the debug
+info slows down everything else, so I will be adding either another version that
+does not have that, or an option to turn it off
 
 ---
 
@@ -9,13 +11,15 @@ Currently all debug info outputs to the lower screen
 - A - Change to selected directory
 - B - go "up" a directory
 - X - CD to `/` and reset and reallocate memory
-- DPAD up and down control the selection arrow
+- DPAD/Circle pad up and down control the selection arrow
+- START to close app
 
 ---
 
 # TODO
-- Currently stuff messes up if a directory is empty
 - Check memory allocation after `malloc` and `realloc`
+- Open files and show binary
+- Basic file actions like delete and create
 
 ---
 
