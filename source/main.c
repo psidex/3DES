@@ -7,59 +7,76 @@
 #include <sys/stat.h>  // stat() for directory identification
 #include <libgen.h>    // for dirname()
 
-// all malloc / realloc statements create the length needed +1, because there needs to be room for the end character
 
-// Colours
-// red = mem related output, blue = button related output, green = path related output, white = other
+/*
+Notes
 
-// Define global variables
-int max_dir_name_size = 260;          // Max len of file/directory name
-int arrowpos;                         // Int of which item in the file array is selected, so a "->" will be printed next to the selected item
-char **file_arr;                      // A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)
-int size_of_file_array;               // Size of file name array
-int array_set = 0;                    // Changed to 1 after it is malloc(ed)
-int offset = 0;                       // Used to offset what is printed from the file array, to allow "scrolling"
-int max_files_on_screen = 27;         // What it says on the tin
-PrintConsole topScreen, bottomScreen; // One PrintConsole for each screen
-char default_dir[6] = "sdmc:/";       // default direction shown when launched/X btn pressed
-char *current_path;                   // Array of chars which will contain the current path being used, max len of 260 chars
+According to Wikipedia, the max FAT32 path length is 255 UTF-16 characters, so 255 * 2 = 510 (because the 16 in UTF-16 means 16 bits = 2 bytes)
+
+all malloc / realloc statements create the length needed +1, because there needs to be room for the end character
+
+Colours { red = mem related output, blue = button related output, green = path related output, white = other }
+*/
 
 
-void get_ud(void) {                                                        // Gets the upper directory of the current_path
+// Array of chars which will contain the current path being used
+char current_path[510];
+// Int of which item in the file array is selected
+int selected = 0;
+// A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)
+char **file_arr;
+// Size of file name array
+int size_of_file_array;
+// Changed to 1 after it is malloc(ed)
+int array_set = 0;
+// Used to offset what is printed from the file array, to allow "scrolling"
+int scroll = 0;
+// One PrintConsole for each screen
+PrintConsole topScreen, bottomScreen;
+// Max len of file/directory name
+int MAX_DIR_NAME_SIZE = 260;
+// What it says on the tin
+int MAX_FILES_ON_SCREEN = 27;
+
+
+
+// Gets the upper directory of the current_path
+void get_ud(void) {
     consoleSelect(&bottomScreen);
 
-    char *path_to_iterate = malloc((strlen(current_path)+1)*sizeof(char)); // New path variable
+    char path_to_iterate[510];
+    strcpy(path_to_iterate, current_path);
 
-    strcpy(path_to_iterate, current_path);                                 // Copy current path into new var
+    char looking_for[] = "/";
+    char *token;
+    char dummy1[510];
+    char dummy2[510];
 
-    char looking_for[1] = "/";                                             // looking for the token "/"
-    char *token;                                                           // needed for strtok()
-    int dummylen = strlen(current_path)+1;                                 // length of mem to allocate for each dummy
-    char *dummy1 = malloc(dummylen*sizeof(char));                          // These 2 keep track of the latest path created
-    char *dummy2 = malloc(dummylen*sizeof(char));                          //
+    // Sometimes there is random stuff in here for some reason, so clean both before starting
+    strcpy(dummy1, "");
+    strcpy(dummy2, "");
 
-    strcpy(dummy1, ""); // Sometimes there is random stuff in here for some reason, so clean both before starting
-    strcpy(dummy2, ""); //
+    // Great explanation here http://stackoverflow.com/a/3890186
+    token = strtok(path_to_iterate, looking_for);
 
-                                                  // Great explanation here http://stackoverflow.com/a/3890186
-    token = strtok(path_to_iterate, looking_for); // Get the first token
-
-    while( token != NULL ) {                      // Walk through other tokens
+    while( token != NULL ) {
         printf("\x1b[32mToken: %s\x1b[0m\n", token);
 
-        strcat(dummy1, token);                    // add token (for example "sdmc:" into dummy1
-        strcat(dummy1, "/");                      // / needed
+        // add token (for example "sdmc:" into dummy1
+        strcat(dummy1, token);
+        strcat(dummy1, "/");
 
         if(strstr(dummy1, current_path) != NULL) {
-            current_path = realloc(current_path, (strlen(dummy2)+1)*sizeof(char)); // re allocate less space for new path
-            strcpy(current_path, dummy2);         // dummy2 happens after this, so will have 1 less token
-            break;                                // break the while loop
+            // dummy2 happens after this, so will have 1 less token
+            strcpy(current_path, dummy2);
+            break;
         }
 
-        strcat(dummy2, token);                    // same as what happens to dummy1
+        strcat(dummy2, token);
         strcat(dummy2, "/");
 
-        token = strtok(NULL, looking_for);        // get the next token
+        // get the next token
+        token = strtok(NULL, looking_for);
     }
 
     printf("\x1b[32mnew current_path: %s\x1b[0m\n", current_path);
@@ -68,196 +85,208 @@ void get_ud(void) {                                                        // Ge
 }
 
 
-// This function is a bit messy, it creates 2 pointers,  which both point to the same directory, then iterates over each of those,
-// first finding out what size the array needs to be, then allocates an array in memory accordingly
-void get_all_in_dir(char dir_to_show[]) {                // Prints all files in a given directory
-    consoleSelect(&bottomScreen);                        // Bottom screen is for debug info. Anything printed in this func will print to bottom screen
-    DIR *d;                                              // Set d to a pointer which will point to a DIR
-    DIR *nd;                                             // For the 2nd iteration of file names
 
-    d = opendir(dir_to_show);                            // Open the dir
-    nd = opendir(dir_to_show);                           // Open the dir for 2nd iteration
+// Fills file array with all files in a given directory
+void get_all_in_dir(char dir_to_show[]) {
+    // Bottom screen is for debug info. Anything printed in this func will print to bottom screen
+    consoleSelect(&bottomScreen);
+
+    // 2 of each for 2 iterations
+    DIR *d;
+    DIR *nd;
+    d = opendir(dir_to_show);
+    nd = opendir(dir_to_show);
     printf("Opened dirs\n");
 
-    if (d) {                                             // If it returned something and is a directory
-        if (array_set == 1){                             // If memory has been set for the arrray
-            for (int i=0; i<size_of_file_array; i++) {
-                free(file_arr[i]);                       // Free all memory allocated inside array
-            }
-            free(file_arr);                              // Free memory allocated for array
+    if (d) {
+        // If memory has been set for the array
+        if (array_set == 1) {
+            // Free all memory allocated inside array
+            for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
+            // Free memory allocated for array
+            free(file_arr);
             printf("\x1b[31mmem for array freed\x1b[0m\n");
-        } else {
+        }
+
+        else {
             array_set = 1;
             printf("array set = 1\n");
         }
 
-        struct dirent *dir;                              // Set dir to a pointer which will point to a struct called dirent
-        struct dirent *ndir;                             // For the 2nd iteration of file names
-        int num = 0;                                     // Used in the while loop for finding out how many files are in dir, then as an index for file array
-        arrowpos = 0;                                    // Reset the position of on screen arrow
-        offset = 0;                                      // Line 17
+        struct dirent *dir;
+        struct dirent *ndir;
+        int count = 0;
+        selected  = 0;
+        scroll    = 0;
 
-        while ((dir = readdir(d)) != NULL) {             // While readdir returns something other than NULL. The variable dir will change each loop
-            num++;                                       // Count how many files there are
+        // While readdir returns something other than NULL. The variable dir will change each loop
+        while ((dir = readdir(d)) != NULL) {
+            // Count how many files there are
+            count++;
         }
 
-        size_of_file_array = num;                        // Set global size_of_file_array to the amount of elements in the array
-        num = 0;                                         // reset num so it can be used again
+        size_of_file_array = count;
+        count = 0;
         printf("size_of_file_array = %i\n", size_of_file_array);
 
         // Create a 2D string array using malloc
-        file_arr = malloc((size_of_file_array+1) * sizeof(char*)); // Create an array of pointers the size of the amount of files in the chosen directory
-        for (int i = 0; i < size_of_file_array; i++) {             // Set each pointer inside the array to point to a char
-            file_arr[i] = malloc((max_dir_name_size+1) * sizeof(char));
+        // Create an array of pointers the size of the amount of files in the chosen directory
+        file_arr = malloc((size_of_file_array+1) * sizeof(char*));
+        for (int i = 0; i < size_of_file_array; i++) {
+            // Set each pointer inside the array to point to a char
+            file_arr[i] = malloc((MAX_DIR_NAME_SIZE+1) * sizeof(char));
         }
 
-        printf("\x1b[31mfile_arr allocated mem\x1b[0m\n");
-        printf("\x1b[31mfile_arr loc: %p\x1b[0m\n", file_arr);     // Escape codes used to colour text
+        // Escape codes used to colour text
+        printf("\x1b[31mfile_arr loc: %p\x1b[0m\n", file_arr);
 
-        while ((ndir = readdir(nd)) != NULL) {           // Iterate over dir again, this time adding filenames to created 2D array
-            strcpy(file_arr[num], ndir->d_name);         // Get d_name from the dir struct and copy into array
-            num++;
+        // Iterate over dir again, this time adding filenames to created 2D array
+        while ((ndir = readdir(nd)) != NULL) {
+            // Get d_name from the dir struct and copy into array
+            strcpy(file_arr[count], ndir->d_name);
+            count++;
         }
         printf("file_arr filled\n");
-        closedir(d);                                     // close access to the dir variables
+        closedir(d);
         closedir(nd);
         printf("dirs closed\n");
     }
 }
 
 
-void print_all_values_in_filear(void) {           // Print all 'things' in the file name array
-    consoleSelect(&bottomScreen);                 // print debug stuff to bottom screen
-    int i;                                        // Init i variable
-    int max_files_to_print;                       // Maximum files that will be printed
 
-    if (size_of_file_array < max_files_on_screen) {
-        max_files_to_print = size_of_file_array;
-    } else {
-        max_files_to_print = max_files_on_screen;
-    }
+// Print all 'things' in the file name array
+void print_all_values_in_filear(void) {
+    consoleSelect(&bottomScreen);
+
+    int max_files_to_print;
+
+    if (size_of_file_array < MAX_FILES_ON_SCREEN) { max_files_to_print = size_of_file_array; }
+    else { max_files_to_print = MAX_FILES_ON_SCREEN; }
 
     printf("max_files_to_print: %i\n", max_files_to_print);
-    consoleSelect(&topScreen);                    // print this to the top screen
+
+    consoleSelect(&topScreen);
 
     if (max_files_to_print > 0) {
+        int i;
         for (i=0; i<max_files_to_print; i++) {
-            if (i == arrowpos) {                       // If the loop number is where the on screen pointer is
-                printf("\n-> %s", file_arr[i+offset]); // Print it with the pointer
+            if (i == selected) {
+                // print as white text on black background
+                printf("\n\t \x1b[47;30m%s\x1b[0m", file_arr[i+scroll]);
             } else{
-                printf("\n   %s", file_arr[i+offset]); // Else, just print it without arrow
+                printf("\n\t %s", file_arr[i+scroll]); // Else, just print it without arrow
             }
         }
     } else {
-        printf("\n\n\t\x1b[47;30m- Folder is empty -\x1b[0m"); // https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1
+        // https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1
+        printf("\n\n\t\x1b[47;30m- Folder is empty -\x1b[0m");
     }
 }
 
 
-void dpadup(void) {
+
+void up(void) {
     consoleSelect(&bottomScreen);
-    if (size_of_file_array == 0){
-        ;                                                    // do nothing
-    }
-    else if (arrowpos+offset == 0) {                         // if arrowpos is 0 and there is not offset, skip to the bottom
-        if (size_of_file_array > max_files_on_screen) {      // If there is a need for offset
-            arrowpos = max_files_on_screen-1;                // arrays are 0 indexed, so max files -1 = highest index of array shown
-            offset = size_of_file_array-max_files_on_screen; // offset will be max size it can be
-        } else {
-            arrowpos = size_of_file_array-1;
+    if (size_of_file_array == 0){ ; }
+
+    // if selected is 0 and there is no scroll, skip to the bottom
+    else if (selected+scroll == 0) {
+         // If there is a need for scroll
+        if (size_of_file_array > MAX_FILES_ON_SCREEN) {
+            // arrays are 0 indexed, so max files -1 = highest index of array shown
+            selected = MAX_FILES_ON_SCREEN-1;
+            // scroll will be max size it can be
+            scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
         }
+        else { selected = size_of_file_array-1; }
     }
-    else if (offset > 0) {
-        offset--;
-    }
-    else {
-        arrowpos--;
-    }
-    printf("\x1b[34mDPADUP: arrowpos: %i, offset: %i\x1b[0m\n", arrowpos, offset);
+
+    else if (scroll > 0) { scroll--; }
+
+    else { selected--; }
+
+    printf("\x1b[34mDPADUP: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
 }
 
 
-void dpaddown(void) {
+
+void down(void) {
     consoleSelect(&bottomScreen);
-    if (size_of_file_array == 0){
-        ;                                               // do nothing
+    if (size_of_file_array == 0){ ; }
+
+    // If selected+scroll are at the largest index of the file array (arrays are 0 indexed!)
+    else if (selected+scroll == size_of_file_array-1) {
+        selected = 0;
+        scroll = 0;
     }
-    else if (arrowpos+offset == size_of_file_array-1) { // If arrowpos+offset are at the largest index of the file array (arrays are 0 indexed!)
-        arrowpos = 0;                                   // go back to start
-        offset = 0;
-    }
-    else if ((arrowpos == max_files_on_screen-1) && (arrowpos+offset < size_of_file_array-1)) { // If arrowpos = highest index and arrowpos+offset < the max index for the array
-        offset++;
-    }
-    else {
-        arrowpos++;
-    }
-    printf("\x1b[34mDPADDOWN: arrowpos: %i, offset: %i\x1b[0m\n", arrowpos, offset);
+
+    // If selected = highest index and selected+scroll < the max index for the array
+    else if ((selected == MAX_FILES_ON_SCREEN-1) && (selected+scroll < size_of_file_array-1)) { scroll++; }
+
+    else { selected++; }
+
+    printf("\x1b[34mDPADDOWN: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
 }
+
 
 
 void a_pressed(void) {
     consoleSelect(&bottomScreen);
-    if (size_of_file_array == 0){
-        ;                                               // do nothing
-    }
-    else {
-        // http://stackoverflow.com/a/4553076
-        int newlen = strlen(current_path)+strlen(file_arr[arrowpos+offset])+strlen("/")+1; // +1 for end char
-        char *for_testing_path = malloc(newlen*sizeof(char)); // For testing if new path is directory
+    if (size_of_file_array == 0){ ; }
 
+    else {
+        // For testing if new path is directory
+        char for_testing_path[510];
         strcpy(for_testing_path, current_path);
-        strcat(for_testing_path, file_arr[arrowpos+offset]);  // Create new path
+
+        // Create new path
+        strcat(for_testing_path, file_arr[selected+scroll]);
         strcat(for_testing_path, "/");
 
         printf("\x1b[32mtest path: %s\x1b[0m\n", for_testing_path);
 
-        struct stat path_stat;                        // Needed for stat()
-        stat(for_testing_path, &path_stat);           // Gives info about the dir
+        // Needed for stat()
+        struct stat path_stat;
+        stat(for_testing_path, &path_stat);
 
-        if (S_ISDIR(path_stat.st_mode)) {             // If it is actually a directory
+        // If it is actually a directory
+        if (S_ISDIR(path_stat.st_mode)) {
             printf("\x1b[32mpath is dir\x1b[0m\n");
-            current_path = realloc(current_path, newlen*sizeof(char));
-            strcat(current_path, file_arr[arrowpos+offset]); // Change current_path to new dir
-            strcat(current_path, "/");
+            strcpy(current_path, for_testing_path);
             get_all_in_dir(current_path);
-        } else {
-            printf("\x1b[32mpath is not dir\x1b[0m\n");
         }
+
+        else { printf("\x1b[32mpath is not dir\x1b[0m\n"); }
     }
 }
+
 
 
 void b_pressed(void) {
     consoleSelect(&bottomScreen);
-    if (!strcmp(current_path, "sdmc:/")) {
-        printf("\x1b[32mCurrently in sdmc:/\x1b[0m\n");
-    }
-    else {
-        get_ud(); // move up a directory
-        printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
-    }
 
+    if (!strcmp(current_path, "sdmc:/")) { printf("\x1b[32mCurrently in sdmc:/\x1b[0m\n"); }
+
+    // move up a directory
+    else { get_ud(); }
 }
 
 
-int main(int argc, char **argv) {      // function: Main - run first
+
+int main(int argc, char **argv) {
 
 	gfxInitDefault();
 
-    // Initialize console for both screens using the two different PrintConsole
+	// Initialize console for both screens using the two different PrintConsole
     consoleInit(GFX_TOP, &topScreen);
     consoleInit(GFX_BOTTOM, &bottomScreen);
 
     consoleSelect(&bottomScreen);
+
     printf("Started...\n");
-    printf("\x1b[32mdefault dir: %s\x1b[0m\n", default_dir);
 
-    arrowpos = 0;                      // On screen pointer set to 1st position
-
-    current_path = malloc((strlen(default_dir)+1)*sizeof(char)); // Create memory for current path
-    printf("\x1b[31mcurrent_path mem loc: %p\x1b[0m\n", current_path);
-	strcpy(current_path, default_dir); // Copy sdmc:/3ds into current_path
+    strcpy(current_path, "sdmc:/");
 
 	get_all_in_dir(current_path);      // Fill file name array with file names
 	printf("get_all_in_dir() done\n");
@@ -266,45 +295,42 @@ int main(int argc, char **argv) {      // function: Main - run first
 
 	// Main loop
 	while (aptMainLoop()) {
-        consoleSelect(&bottomScreen);
 
 		gspWaitForVBlank();
 		hidScanInput();
 
-		// Buttons:
-		// DPAD UP   : Move arrow up
-		// DPAD DOWN : Move arrow down
-		// BUTTON X  : Get files & directories again
+		consoleSelect(&bottomScreen);
 
-		u32 kDown = hidKeysDown(); // Keys pressed
-		// u32 kHeld = hidKeysHeld(); // Keys being held
+		u32 kDown = hidKeysDown();
 
-		if (kDown & KEY_START) {
-			break; // break in order to return to hbl
-        }
+		if (kDown & KEY_START) { break; }
+
         else if (kDown & KEY_UP) {
-            dpadup();
+            up();
             consoleInit(GFX_TOP, &topScreen); // re-init-ing the console clears the screen without clearing bottom screen
             print_all_values_in_filear();
         }
+
         else if (kDown & KEY_DOWN) {
-            dpaddown();
+            down();
             consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
+
         else if (kDown & KEY_X) {
             printf("\x1b[34mKEY_X pressed\x1b[0m\n");
-            current_path = realloc(current_path, (strlen(default_dir)+1)*sizeof(char)); // reallocate memory for default path
-            strcpy(current_path, default_dir); // Go back to /3ds
-            get_all_in_dir(current_path);      // Re-init file array
+            strcpy(current_path, "sdmc:/");
+            get_all_in_dir(current_path);
             consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
+
         else if (kDown & KEY_A) {
             a_pressed();
             consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
+
         else if (kDown & KEY_B) {
             b_pressed();
             get_all_in_dir(current_path);
@@ -312,18 +338,13 @@ int main(int argc, char **argv) {      // function: Main - run first
             print_all_values_in_filear();
         }
 
-		// Flush and swap framebuffers (Not sure what this actually means)
+		// Flush and swap framebuffers
 		gfxFlushBuffers();
 		gfxSwapBuffers();
 	}
 
-    if (array_set == 1){                             // If memory has been set for the arrray
-        for (int i=0; i<size_of_file_array; i++) {
-            free(file_arr[i]);                       // Free all memory allocated inside array
-        }
-        free(file_arr);                              // Free memory allocated for array
-    }
-	free(current_path);
-	gfxExit(); // Exit services
-	return 0;  // End main
+	for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
+    free(file_arr);
+	gfxExit();
+	return 0;
 }

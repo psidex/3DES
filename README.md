@@ -17,9 +17,16 @@ does not have that, or an option to turn it off
 ---
 
 # TODO
-- Check memory allocation after `malloc` and `realloc`
+- Check memory allocation after `malloc`
+- Basic file actions like delete and create directories
 - Open files and show binary
-- Basic file actions like delete and create
+
+---
+
+# Credits
+
+Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
+with the code :)
 
 ---
 
