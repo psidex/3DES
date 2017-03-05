@@ -11,6 +11,7 @@ does not have that, or an option to turn it off
 - A - Change to selected directory
 - B - go "up" a directory
 - X - CD to `/` and reset and reallocate memory
+- L - Create a new directory (brings a keyboard up to type the name)
 - DPAD/Circle pad up and down control the selection arrow
 - START to close app
 

@@ -7,7 +7,6 @@
 #include <sys/stat.h>  // stat() for directory identification
 #include <libgen.h>    // for dirname()
 
-
 /*
 Notes
 
@@ -274,6 +273,42 @@ void b_pressed(void) {
 
 
 
+void l_pressed(void) {
+    consoleSelect(&bottomScreen);
+    printf("Bringing up keyboard...\n");
+
+    SwkbdState swkbd;
+    char newdirname[260];
+    SwkbdButton button = SWKBD_BUTTON_NONE;
+
+    swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, 260);
+    swkbdSetHintText(&swkbd, "New directory name here");
+    button = swkbdInputText(&swkbd, newdirname, sizeof(newdirname));
+
+    printf("Dir name: %s\n", newdirname);
+
+    // Create the path to be test/created
+    char path_to_create[510];
+    strcpy(path_to_create, current_path);
+    strcat(path_to_create, newdirname);
+
+    printf("path to create: %s\n", path_to_create);
+
+    int result;
+
+    // will fail is path already exists
+    result = mkdir(path_to_create, 0700);
+
+    if (result == 0) {
+        printf("Dir created\n");
+    }
+    else {
+        printf("Dir creation failed\n");
+    }
+}
+
+
+
 int main(int argc, char **argv) {
 
 	gfxInitDefault();
@@ -333,6 +368,13 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_B) {
             b_pressed();
+            get_all_in_dir(current_path);
+            consoleInit(GFX_TOP, &topScreen);
+            print_all_values_in_filear();
+        }
+
+        else if (kDown & KEY_L ) {
+            l_pressed();
             get_all_in_dir(current_path);
             consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
