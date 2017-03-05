@@ -55,7 +55,6 @@ void get_ud(void) {
     strcpy(dummy1, "");
     strcpy(dummy2, "");
 
-    // Great explanation here http://stackoverflow.com/a/3890186
     token = strtok(path_to_iterate, looking_for);
 
     while( token != NULL ) {
@@ -170,17 +169,13 @@ void print_all_values_in_filear(void) {
     if (max_files_to_print > 0) {
         int i;
         for (i=0; i<max_files_to_print; i++) {
-            if (i == selected) {
-                // print as white text on black background
-                printf("\n\t \x1b[47;30m%s\x1b[0m", file_arr[i+scroll]);
-            } else{
-                printf("\n\t %s", file_arr[i+scroll]); // Else, just print it without arrow
-            }
+            // print as white text on black background
+            if (i == selected) { printf("\n\t \x1b[47;30m%s\x1b[0m", file_arr[i+scroll]); }
+            // Else, just print it without arrow
+            else { printf("\n\t %s", file_arr[i+scroll]); }
         }
-    } else {
-        // https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1
-        printf("\n\n\t\x1b[47;30m- Folder is empty -\x1b[0m");
     }
+    else { printf("\n\n\t\x1b[47;30m- Folder is empty -\x1b[0m"); }
 }
 
 
