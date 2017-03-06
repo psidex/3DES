@@ -72,7 +72,6 @@ void get_ud(void) {
         // get the next token288342890277634069
         token = strtok(NULL, looking_for);
     }
-
     printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 }
 
@@ -123,8 +122,8 @@ void get_all_in_dir(char dir_to_show[]) {
             isfile_arr[count] = (ndir->d_type == 8);
             count++;
         }
-        closedir(d);
-        closedir(nd);
+    closedir(d);
+    closedir(nd);
     }
 }
 
@@ -139,6 +138,7 @@ void print_all_values_in_filear(void) {
     if (size_of_file_array < MAX_FILES_ON_SCREEN) { max_files_to_print = size_of_file_array; }
     else { max_files_to_print = MAX_FILES_ON_SCREEN; }
 
+    consoleInit(GFX_TOP, &topScreen);
     consoleSelect(&topScreen);
 
     if (max_files_to_print > 0) {
@@ -157,11 +157,8 @@ void print_all_values_in_filear(void) {
             }
 
             else {
-                // print as white text on black background
                 if (i == selected) { printf("\n <file> | \x1b[47;30m%s\x1b[0m", file_arr[i+scroll]); }
-                // Else, just print it without arrow
                 else { printf("\n <file> | %s", file_arr[i+scroll]); }
-
             }
         }
         // If there are files below on screen
@@ -178,7 +175,7 @@ void up(void) {
 
     // if selected is 0 and there is no scroll, skip to the bottom
     else if (selected+scroll == 0) {
-         // If there is a need for scroll
+        // If there is a need for scroll
         if (size_of_file_array > MAX_FILES_ON_SCREEN) {
             // arrays are 0 indexed, so max files -1 = highest index of array shown
             selected = MAX_FILES_ON_SCREEN-1;
@@ -213,6 +210,7 @@ void down(void) {
 
 void a_pressed(void) {
     consoleSelect(&debugscreen);
+
     if (size_of_file_array == 0){ ; }
 
     else {
@@ -223,9 +221,22 @@ void a_pressed(void) {
             strcat(current_path, "/");
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
+            print_all_values_in_filear();
         }
 
-        else { printf("path is file\n"); }
+        else {
+            printf("path is file\n");
+            consoleInit(GFX_TOP, &topScreen);
+            consoleSelect(&topScreen);
+            printf("This is placeholder text\nPress B to go back");
+
+            while (1) {
+                hidScanInput();
+                u32 exitkDown = hidKeysDown();
+                if (exitkDown & KEY_B) { break; }
+            }
+            print_all_values_in_filear();
+        }
     }
 }
 
@@ -276,9 +287,9 @@ void l_pressed(void) {
 
 int main(int argc, char **argv) {
 
-	gfxInitDefault();
+    gfxInitDefault();
 
-	// Initialize console for both screens using the two different PrintConsole
+    // Initialize console for both screens using the two different PrintConsole
     consoleInit(GFX_TOP, &topScreen);
     consoleInit(GFX_BOTTOM, &debugscreen);
     consoleInit(GFX_BOTTOM, &instructionscreen);
@@ -302,29 +313,27 @@ int main(int argc, char **argv) {
 
     strcpy(current_path, "sdmc:/");
 
-	get_all_in_dir(current_path);      // Fill file name array with file names
+    get_all_in_dir(current_path);      // Fill file name array with file names
 
-	print_all_values_in_filear();      // Print all in /3ds
+    print_all_values_in_filear();      // Print all in /
 
-	// Main loop
-	while (aptMainLoop()) {
+    // Main loop
+    while (aptMainLoop()) {
 
-		gspWaitForVBlank();
-		hidScanInput();
+        gspWaitForVBlank();
+        hidScanInput();
 
-		u32 kDown = hidKeysDown();
+        u32 kDown = hidKeysDown();
 
-		if (kDown & KEY_START) { break; }
+        if (kDown & KEY_START) { break; }
 
         else if (kDown & KEY_UP) {
             up();
-            consoleInit(GFX_TOP, &topScreen); // re-init-ing the console clears the screen without clearing bottom screen
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_DOWN) {
             down();
-            consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
 
@@ -334,39 +343,34 @@ int main(int argc, char **argv) {
             strcpy(current_path, "sdmc:/");
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
-            consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_A) {
             a_pressed();
-            consoleInit(GFX_TOP, &topScreen);
-            print_all_values_in_filear();
         }
 
         else if (kDown & KEY_B) {
             b_pressed();
             get_all_in_dir(current_path);
-            consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_L ) {
             l_pressed();
             get_all_in_dir(current_path);
-            consoleInit(GFX_TOP, &topScreen);
             print_all_values_in_filear();
         }
 
-		// Flush and swap framebuffers
-		gfxFlushBuffers();
-		gfxSwapBuffers();
-	}
+        // Flush and swap framebuffers
+        gfxFlushBuffers();
+        gfxSwapBuffers();
+    }
 
     // Clear up allocated memory
-	for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
+    for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
     free(file_arr);
     free(isfile_arr);
-	gfxExit();
-	return 0;
+    gfxExit();
+    return 0;
 }
