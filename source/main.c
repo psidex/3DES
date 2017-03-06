@@ -3,9 +3,6 @@
 #include <string.h>    // String manipulation
 #include <dirent.h>    // For opendir() and readdir()
 #include <3ds.h>       // Main 3ds lib (libctru)
-#include <sys/types.h> // for comparing what is in stat()
-#include <sys/stat.h>  // stat() for directory identification
-#include <libgen.h>    // for dirname()
 
 /*
 Notes
@@ -24,6 +21,8 @@ char current_path[510];
 int selected = 0;
 // A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)
 char **file_arr;
+// Same as file_arr, will be used "alongside" file_arr to check whether something is a file or directory
+char *isfile_arr;
 // Size of file name array
 int size_of_file_array;
 // Changed to 1 after it is malloc(ed)
@@ -58,8 +57,6 @@ void get_ud(void) {
     token = strtok(path_to_iterate, looking_for);
 
     while( token != NULL ) {
-        printf("\x1b[32mToken: %s\x1b[0m\n", token);
-
         // add token (for example "sdmc:" into dummy1
         strcat(dummy1, token);
         strcat(dummy1, "/");
@@ -73,13 +70,11 @@ void get_ud(void) {
         strcat(dummy2, token);
         strcat(dummy2, "/");
 
-        // get the next token
+        // get the next token288342890277634069
         token = strtok(NULL, looking_for);
     }
 
-    printf("\x1b[32mnew current_path: %s\x1b[0m\n", current_path);
-    printf("\x1b[32mdummy1: %s\x1b[0m\n", dummy1);
-    printf("\x1b[32mdummy2: %s\x1b[0m\n", dummy2);
+    printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 }
 
 
@@ -94,22 +89,10 @@ void get_all_in_dir(char dir_to_show[]) {
     DIR *nd;
     d = opendir(dir_to_show);
     nd = opendir(dir_to_show);
-    printf("Opened dirs\n");
 
     if (d) {
-        // If memory has been set for the array
-        if (array_set == 1) {
-            // Free all memory allocated inside array
-            for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
-            // Free memory allocated for array
-            free(file_arr);
-            printf("\x1b[31mmem for array freed\x1b[0m\n");
-        }
-
-        else {
-            array_set = 1;
-            printf("array set = 1\n");
-        }
+        // Get rid of strings in file name array
+        for (int i = 0; i < size_of_file_array; i++) { free(file_arr[i]); }
 
         struct dirent *dir;
         struct dirent *ndir;
@@ -129,25 +112,21 @@ void get_all_in_dir(char dir_to_show[]) {
 
         // Create a 2D string array using malloc
         // Create an array of pointers the size of the amount of files in the chosen directory
-        file_arr = malloc((size_of_file_array+1) * sizeof(char*));
-        for (int i = 0; i < size_of_file_array; i++) {
-            // Set each pointer inside the array to point to a char
-            file_arr[i] = malloc((MAX_DIR_NAME_SIZE+1) * sizeof(char));
-        }
-
-        // Escape codes used to colour text
-        printf("\x1b[31mfile_arr loc: %p\x1b[0m\n", file_arr);
+        file_arr = realloc(file_arr, (size_of_file_array+1) * sizeof(char*));
+        // Set each pointer inside the array to point to a char
+        for (int i = 0; i < size_of_file_array; i++) { file_arr[i] = malloc((MAX_DIR_NAME_SIZE+1) * sizeof(char)); }
+        isfile_arr = realloc(isfile_arr, (size_of_file_array+1) * sizeof(bool));
 
         // Iterate over dir again, this time adding filenames to created 2D array
         while ((ndir = readdir(nd)) != NULL) {
             // Get d_name from the dir struct and copy into array
             strcpy(file_arr[count], ndir->d_name);
+            // If d_type is a file
+            isfile_arr[count] = (ndir->d_type == 8);
             count++;
         }
-        printf("file_arr filled\n");
         closedir(d);
         closedir(nd);
-        printf("dirs closed\n");
     }
 }
 
@@ -162,11 +141,10 @@ void print_all_values_in_filear(void) {
     if (size_of_file_array < MAX_FILES_ON_SCREEN) { max_files_to_print = size_of_file_array; }
     else { max_files_to_print = MAX_FILES_ON_SCREEN; }
 
-    printf("max_files_to_print: %i\n", max_files_to_print);
-
     consoleSelect(&topScreen);
 
     if (max_files_to_print > 0) {
+        if (scroll > 0) { printf("/\\"); } // Print up arrow showing you can scroll up
         int i;
         for (i=0; i<max_files_to_print; i++) {
             // print as white text on black background
@@ -174,8 +152,10 @@ void print_all_values_in_filear(void) {
             // Else, just print it without arrow
             else { printf("\n\t %s", file_arr[i+scroll]); }
         }
+        // If there are files below on screen
+        if ( (size_of_file_array > MAX_FILES_ON_SCREEN) && (scroll == 0) ) { printf("\n\\/"); }
     }
-    else { printf("\n\n\t\x1b[47;30m- Folder is empty -\x1b[0m"); }
+    else { printf("\n\n\t\t\x1b[47;30m- Folder is empty -\x1b[0m"); }
 }
 
 
@@ -200,7 +180,7 @@ void up(void) {
 
     else { selected--; }
 
-    printf("\x1b[34mDPADUP: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
+    printf("\x1b[34mUP: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
 }
 
 
@@ -220,7 +200,7 @@ void down(void) {
 
     else { selected++; }
 
-    printf("\x1b[34mDPADDOWN: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
+    printf("\x1b[34mDOWN: selected: %i, scroll: %i\x1b[0m\n", selected, scroll);
 }
 
 
@@ -230,24 +210,12 @@ void a_pressed(void) {
     if (size_of_file_array == 0){ ; }
 
     else {
-        // For testing if new path is directory
-        char for_testing_path[510];
-        strcpy(for_testing_path, current_path);
-
-        // Create new path
-        strcat(for_testing_path, file_arr[selected+scroll]);
-        strcat(for_testing_path, "/");
-
-        printf("\x1b[32mtest path: %s\x1b[0m\n", for_testing_path);
-
-        // Needed for stat()
-        struct stat path_stat;
-        stat(for_testing_path, &path_stat);
-
         // If it is actually a directory
-        if (S_ISDIR(path_stat.st_mode)) {
+        if (!isfile_arr[selected+scroll]) {
             printf("\x1b[32mpath is dir\x1b[0m\n");
-            strcpy(current_path, for_testing_path);
+            strcat(current_path, file_arr[selected+scroll]);
+            strcat(current_path, "/");
+            printf("\x1b[32mNew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
         }
 
@@ -316,10 +284,16 @@ int main(int argc, char **argv) {
 
     printf("Started...\n");
 
+    // Initial allocation for these 2 arrays
+    file_arr = malloc(1 * sizeof(char*));
+    isfile_arr = malloc(1 * sizeof(bool));
+
+    // For when it is first realloc(ed)
+    size_of_file_array = 1;
+
     strcpy(current_path, "sdmc:/");
 
 	get_all_in_dir(current_path);      // Fill file name array with file names
-	printf("get_all_in_dir() done\n");
 
 	print_all_values_in_filear();      // Print all in /3ds
 
@@ -382,6 +356,7 @@ int main(int argc, char **argv) {
 
 	for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
     free(file_arr);
+    free(isfile_arr);
 	gfxExit();
 	return 0;
 }
