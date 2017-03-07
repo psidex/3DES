@@ -16,9 +16,7 @@ it more readable and more of a notification area
 
 # TODO
 - Check memory allocated correctly after `malloc`
-- In `get_all_in_dir()`, realloc memory instead of freeing and allocating again
 - Set R to delete file/directory
-- If you press A on a file, show it's binary (maybe show text)
 - Get a nice icon for .SMDH file
 
 # Credits
@@ -27,7 +25,11 @@ Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://g
 with the code :)
 
 # Notes (mainly for myself)
+
 Useful:
+
 [Directory stuff](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html)
+
 [Using escape codes](https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1)
+
 [Explanation of `strtok()`](http://stackoverflow.com/a/3890186)
