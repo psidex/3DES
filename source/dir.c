@@ -4,13 +4,13 @@
 void get_ud(void) {
     consoleSelect(&debugscreen);
 
-    char path_to_iterate[510];
+    char path_to_iterate[511];
     strcpy(path_to_iterate, current_path);
 
     char looking_for[] = "/";
     char *token;
-    char dummy1[510];
-    char dummy2[510];
+    char dummy1[511];
+    char dummy2[511];
 
     // Sometimes there is random stuff in here for some reason, so clean both before starting
     strcpy(dummy1, "");

@@ -93,7 +93,7 @@ void l_pressed(void) {
     button = swkbdInputText(&swkbd, newdirname, sizeof(newdirname));
 
     // Create the path to be test/created
-    char path_to_create[510];
+    char path_to_create[511];
     strcpy(path_to_create, current_path);
     strcat(path_to_create, newdirname);
 
