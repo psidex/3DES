@@ -31,11 +31,11 @@ int main(int argc, char **argv) {
     consoleInit(GFX_BOTTOM, &debugscreen);
     consoleInit(GFX_BOTTOM, &instructionscreen);
 
-    consoleSetWindow(&instructionscreen, 0, 0, 40, 5);
-    consoleSetWindow(&debugscreen, 0, 6, 40, 24);
+    consoleSetWindow(&instructionscreen, 0, 0, 40, 6);
+    consoleSetWindow(&debugscreen, 0, 7, 40, 23);
 
     consoleSelect(&instructionscreen);
-    printf("A - CD/Open file, B - go up a directory X - CD to /, L - Create a new dir\nDPAD/Circle pad - up and down\nSTART - close app");
+    printf("A - CD/Open file, B - go up a directory X - CD to /, L - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
     printf("\n----------------------------------------");
 
     consoleSelect(&debugscreen);
@@ -95,6 +95,12 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_L ) {
             l_pressed();
+            get_all_in_dir(current_path);
+            print_all_values_in_filear();
+        }
+
+        else if (kDown & KEY_R ) {
+            r_pressed();
             get_all_in_dir(current_path);
             print_all_values_in_filear();
         }

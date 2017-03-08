@@ -23,7 +23,7 @@ void print_all_values_in_filear(void) {
             if (!isfile_arr[i+scroll]) {
                 // print as white text on black background
                 if (i == selected) { printf("\n <dir>  | \x1b[47;30m%s\x1b[0m", file_arr[i+scroll]); }
-                // Else, just print it without arrow
+                // Else, just print it without highlight
                 else { printf("\n <dir>  | %s", file_arr[i+scroll]); }
             }
 
@@ -33,7 +33,7 @@ void print_all_values_in_filear(void) {
             }
         }
         // If there are files below on screen
-        if ( (size_of_file_array > MAX_FILES_ON_SCREEN) && (scroll == 0) ) { printf("\n\n\\/ "); }
+        if ( (size_of_file_array > MAX_FILES_ON_SCREEN) && (selected+scroll != size_of_file_array-1) ) { printf("\n\n\\/ "); }
     }
     else { printf("\n\n\t\t\x1b[47;30m- Folder is empty -\x1b[0m"); }
 }

@@ -87,3 +87,20 @@ void get_all_in_dir(char dir_to_show[]) {
     closedir(nd);
     }
 }
+
+void delete_selected(void) {
+    consoleSelect(&debugscreen);
+
+    char filepath[511];
+    strcpy(filepath, current_path);
+    strcat(filepath, file_arr[selected+scroll]);
+
+    // If it is a dir
+    if (!isfile_arr[selected+scroll]) { printf("Deleting directories not implemented\n"); }
+    else {
+        int ret;
+        ret = remove(filepath);
+        if(ret == 0) { printf("File deleted\n"); }
+        else { printf("\x1b[31mError: unable to delete\x1b[0m\n"); }
+    }
+}

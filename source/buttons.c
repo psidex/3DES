@@ -108,6 +108,24 @@ void l_pressed(void) {
         printf("Dir created\n");
     }
     else {
-        printf("\x1b[31mDir creation failed\x1b[0m\n");
+        printf("\x1b[31mError: Directory creation failed\x1b[0m\n");
     }
+}
+
+void r_pressed(void) {
+    consoleInit(GFX_TOP, &topScreen);
+    consoleSelect(&topScreen);
+    printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
+    printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
+
+    while (1) {
+        hidScanInput();
+        u32 exitkDown = hidKeysDown();
+        if (exitkDown & KEY_A) {
+            delete_selected();
+            break;
+        }
+        else if (exitkDown & KEY_B) { break; }
+    }
+    print_all_values_in_filear();
 }
