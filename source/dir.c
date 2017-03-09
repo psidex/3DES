@@ -95,12 +95,18 @@ void delete_selected(void) {
     strcpy(filepath, current_path);
     strcat(filepath, file_arr[selected+scroll]);
 
+    int ret;
+
     // If it is a dir
-    if (!isfile_arr[selected+scroll]) { printf("Deleting directories not implemented\n"); }
+    if (!isfile_arr[selected+scroll]) {
+        ret = rmdir(filepath);
+        if(!ret) { printf("Directory deleted\n"); }
+        else { printf("\x1b[31mDeleting non-empty dirs not implemented\x1b[0m\n"); }
+    }
+
     else {
-        int ret;
         ret = remove(filepath);
-        if(ret == 0) { printf("File deleted\n"); }
+        if(!ret) { printf("File deleted\n"); }
         else { printf("\x1b[31mError: unable to delete\x1b[0m\n"); }
     }
 }

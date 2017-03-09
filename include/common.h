@@ -4,6 +4,7 @@
 #include <stdlib.h> // malloc and free
 #include <string.h> // String manipulation
 #include <dirent.h> // For opendir() and readdir()
+#include <unistd.h> // rmdir()
 #include <3ds.h>    // Main 3ds lib (libctru)
 
 /*
