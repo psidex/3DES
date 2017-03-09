@@ -22,6 +22,7 @@ to create a directory and nothing happens)
 - Clean up on screen instructions
 - Quick-skip to top/bottom of list using left/right
 - Fast scroll if you hold up/down
+- Be able to select a file with Y then copy/paste to another path
 - Get a nice icon for .SMDH file
 
 # Credits
