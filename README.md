@@ -1,24 +1,24 @@
 # 3dsFB
 A (simple) homebrew 3ds File Browser written in C
 
-Top screen - main file Browser
-
-Upper area of bottom screen - instructions
-
-Lower area of bottom screen - debug output (look here if, for example, you try
+ - Top screen - main file Browser
+ - Upper area of bottom screen - instructions
+ - Lower area of bottom screen - debug output (look here if, for example, you try
 to create a directory and nothing happens)
 
 # Buttons
-- A - Change to selected directory (opening files not supported yet)
+##### Things in the buttons list below that are labelled as `not supported` have the possibility of being added at a future date but are not definitely going to be implemented.
+
+- A - Change to selected directory (opening files not supported)
 - B - go "up" a directory
 - X - CD to `/` and reallocate memory
 - L - Create a new directory (brings a keyboard up to type the name)
-- R - Delete file (directories not supported yet)
+- R - Delete file (deleting non-empty directories not supported)
 - DPAD/Circle pad up and down control the selection of files/directories
 - START to close app and go back to HB menu
 
 # TODO
-- Check memory allocated correctly after `malloc` & `realloc`
+- Check if memory has been allocated correctly after `malloc` & `realloc`
 - Clean up on screen instructions
 - Quick-skip to top/bottom of list using left/right
 - Fast scroll if you hold up/down
