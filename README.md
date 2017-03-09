@@ -7,13 +7,14 @@ A (simple) homebrew 3ds File Browser written in C
 to create a directory and nothing happens)
 
 # Buttons
-##### Things in the buttons list below that are labelled as `not supported` have the possibility of being added at a future date but are not definitely going to be implemented.
+Things in the buttons list below that are labelled as `not supported` have the
+possibility of being added at a future date but are not definitely going to be implemented.
 
 - A - Change to selected directory (opening files not supported)
 - B - go "up" a directory
 - X - CD to `/` and reallocate memory
 - L - Create a new directory (brings a keyboard up to type the name)
-- R - Delete file (deleting non-empty directories not supported)
+- R - Delete file/directory (deleting non-empty directories not supported)
 - DPAD/Circle pad up and down control the selection of files/directories
 - START to close app and go back to HB menu
 
