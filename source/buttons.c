@@ -3,7 +3,6 @@
 #include "draw.h"
 
 void up(void) {
-    consoleSelect(&debugscreen);
     if (size_of_file_array == 0){ ; }
 
     // if selected is 0 and there is no scroll, skip to the bottom
@@ -24,7 +23,6 @@ void up(void) {
 }
 
 void down(void) {
-    consoleSelect(&debugscreen);
     if (size_of_file_array == 0){ ; }
 
     // If selected+scroll are at the largest index of the file array (arrays are 0 indexed!)
@@ -37,6 +35,29 @@ void down(void) {
     else if ((selected == MAX_FILES_ON_SCREEN-1) && (selected+scroll < size_of_file_array-1)) { scroll++; }
 
     else { selected++; }
+}
+
+void left(void) {
+    if (size_of_file_array == 0){ ; }
+    // If selected+scroll are at the largest index of the file array (arrays are 0 indexed!)
+    else {
+        selected = 0;
+        scroll = 0;
+    }
+}
+
+void right(void){
+    if (size_of_file_array == 0){ ; }
+    else {
+        // If there is a need for scroll
+        if (size_of_file_array > MAX_FILES_ON_SCREEN) {
+            // arrays are 0 indexed, so max files -1 = highest index of array shown
+            selected = MAX_FILES_ON_SCREEN-1;
+            // scroll will be max size it can be
+            scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
+        }
+        else { selected = size_of_file_array-1; }
+    }
 }
 
 void a_pressed(void) {

@@ -16,14 +16,14 @@ possibility of being added at a future date but are not definitely going to be i
 - L - Create a new directory (brings a keyboard up to type the name)
 - R - Delete file/directory (deleting non-empty directories not supported)
 - DPAD/Circle pad up and down control the selection of files/directories
+- DPAD/Circle pad left and right go to the top/bottom of the file/directory list
 - START to close app and go back to HB menu
 
 # TODO
 - Check if memory has been allocated correctly after `malloc` & `realloc`
-- Clean up on screen instructions
-- Quick-skip to top/bottom of list using left/right
 - Fast scroll if you hold up/down
 - Be able to select a file with Y then copy/paste to another path
+- Put directories at the top of the list, files at the bottom
 - Get a nice icon for .SMDH file
 
 # Credits

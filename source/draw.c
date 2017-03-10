@@ -17,8 +17,9 @@ void print_all_values_in_filear(void) {
         else { printf("\n"); }               // Keep all the files in the same place on screen
 
         int i;
-        for (i=0; i<max_files_to_print; i++) {
 
+        // Print directories first
+        for (i=0; i<max_files_to_print; i++) {
             // If it is a dir
             if (!isfile_arr[i+scroll]) {
                 // print as white text on black background
@@ -32,6 +33,7 @@ void print_all_values_in_filear(void) {
                 else { printf("\n <file> | %s", file_arr[i+scroll]); }
             }
         }
+
         // If there are files below on screen
         if ( (size_of_file_array > MAX_FILES_ON_SCREEN) && (selected+scroll != size_of_file_array-1) ) { printf("\n\n\\/ "); }
     }

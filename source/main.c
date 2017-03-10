@@ -18,7 +18,7 @@ int scroll = 0;
 // One PrintConsole for each screen
 PrintConsole topScreen, instructionscreen, debugscreen;
 // Max len of file/directory name
-int MAX_DIR_NAME_SIZE = 260;
+int MAX_DIR_NAME_SIZE = 261;
 // What it says on the tin
 int MAX_FILES_ON_SCREEN = 26;
 
@@ -31,11 +31,11 @@ int main(int argc, char **argv) {
     consoleInit(GFX_BOTTOM, &debugscreen);
     consoleInit(GFX_BOTTOM, &instructionscreen);
 
-    consoleSetWindow(&instructionscreen, 0, 0, 40, 6);
-    consoleSetWindow(&debugscreen, 0, 7, 40, 23);
+    consoleSetWindow(&instructionscreen, 0, 0, 40, 8);
+    consoleSetWindow(&debugscreen, 0, 9, 40, 21);
 
     consoleSelect(&instructionscreen);
-    printf("A - CD/Open file, B - go up a directory X - CD to /, L - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
+    printf("A - Change Directory\nB - go up a directory\nX - CD to / and reallocate mem\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
     printf("\n----------------------------------------");
 
     consoleSelect(&debugscreen);
@@ -71,6 +71,16 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_DOWN) {
             down();
+            print_all_values_in_filear();
+        }
+
+        else if (kDown & KEY_LEFT) {
+            left();
+            print_all_values_in_filear();
+        }
+
+        else if (kDown & KEY_RIGHT) {
+            right();
             print_all_values_in_filear();
         }
 
