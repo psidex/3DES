@@ -1,6 +1,7 @@
 #include "buttons.h"
 #include "dir.h"
 #include "draw.h"
+#include "delete.h"
 
 void up(void) {
     if (size_of_file_array == 0){ ; }
@@ -114,7 +115,7 @@ void l_pressed(void) {
     button = swkbdInputText(&swkbd, newdirname, sizeof(newdirname));
 
     // Create the path to be test/created
-    char path_to_create[511];
+    char path_to_create[MAX_PATH_SIZE];
     strcpy(path_to_create, current_path);
     strcat(path_to_create, newdirname);
 

@@ -28,3 +28,4 @@ extern PrintConsole instructionscreen;
 extern PrintConsole debugscreen;
 extern int MAX_DIR_NAME_SIZE;
 extern int MAX_FILES_ON_SCREEN;
+extern int MAX_PATH_SIZE;

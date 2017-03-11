@@ -1,16 +1,17 @@
 #include "dir.h"
+#include "sort.h"
 
 // Gets the upper directory of the current_path
 void get_ud(void) {
     consoleSelect(&debugscreen);
 
-    char path_to_iterate[511];
+    char path_to_iterate[MAX_PATH_SIZE];
     strcpy(path_to_iterate, current_path);
 
     char looking_for[] = "/";
     char *token;
-    char dummy1[511];
-    char dummy2[511];
+    char dummy1[MAX_PATH_SIZE];
+    char dummy2[MAX_PATH_SIZE];
 
     // Sometimes there is random stuff in here for some reason, so clean both before starting
     strcpy(dummy1, "");
@@ -36,35 +37,6 @@ void get_ud(void) {
         token = strtok(NULL, looking_for);
     }
     printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
-}
-
-// Sort given array (yay for bubble sort)
-void bubble_sort_files() {
-    bool swapped = true;
-    char temp[MAX_DIR_NAME_SIZE];
-    int inttemp;
-    int pass;
-    int pass2;
-
-    for (pass=size_of_file_array-1; pass>0; pass--) {
-        for (pass2=0; pass2<pass; pass2++) {
-            if (strcasecmp(file_arr[pass2], file_arr[pass2+1]) > 0) {
-                swapped = true;
-
-                // Swap values in file name array
-                strcpy(temp, file_arr[pass2]);
-                strcpy(file_arr[pass2], file_arr[pass2+1]);
-                strcpy(file_arr[pass2+1], temp);
-
-                // Swap values in isfile array
-                inttemp = isfile_arr[pass2];
-                isfile_arr[pass2] = isfile_arr[pass2+1];
-                isfile_arr[pass2+1] = inttemp;
-
-            }
-        }
-        if (!swapped) { break; }
-    }
 }
 
 // Fills file array with all files in a given directory
@@ -116,27 +88,4 @@ void get_all_in_dir(char dir_to_show[]) {
     closedir(d);
     closedir(nd);
     bubble_sort_files();
-}
-
-void delete_selected(void) {
-    consoleSelect(&debugscreen);
-
-    char filepath[511];
-    strcpy(filepath, current_path);
-    strcat(filepath, file_arr[selected+scroll]);
-
-    int ret;
-
-    // If it is a dir
-    if (!isfile_arr[selected+scroll]) {
-        ret = rmdir(filepath);
-        if(!ret) { printf("Directory deleted\n"); }
-        else { printf("\x1b[31mDeleting non-empty dirs not implemented\x1b[0m\n"); }
-    }
-
-    else {
-        ret = remove(filepath);
-        if(!ret) { printf("File deleted\n"); }
-        else { printf("\x1b[31mError: unable to delete\x1b[0m\n"); }
-    }
 }

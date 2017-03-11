@@ -21,6 +21,8 @@ PrintConsole topScreen, instructionscreen, debugscreen;
 int MAX_DIR_NAME_SIZE = 261;
 // What it says on the tin
 int MAX_FILES_ON_SCREEN = 26;
+// ^
+int MAX_PATH_SIZE = 511;
 
 int main(int argc, char **argv) {
 
