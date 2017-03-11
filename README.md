@@ -6,6 +6,11 @@ A (simple) homebrew 3ds File Browser written in C
  - Lower area of bottom screen - debug output (look here if, for example, you try
 to create a directory and nothing happens)
 
+# Notes
+- Deleting directories uses a recursive function, so if you have a large (very large)
+amount of directories/files inside the directory you want to delete, it may end up
+breaking
+
 # Buttons
 Things in the buttons list below that are labelled as `not supported` have the
 possibility of being added at a future date but are not definitely going to be implemented.
@@ -14,7 +19,7 @@ possibility of being added at a future date but are not definitely going to be i
 - B - go "up" a directory
 - X - CD to `/` and reallocate memory
 - L - Create a new directory (brings a keyboard up to type the name)
-- R - Delete file/directory (deleting non-empty directories not supported)
+- R - Delete file/directory
 - DPAD/Circle pad up and down control the selection of files/directories
 - DPAD/Circle pad left and right go to the top/bottom of the file/directory list
 - START to close app and go back to HB menu
