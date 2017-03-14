@@ -20,7 +20,7 @@ Colours { red = error related, blue = button related, green = path related, whit
 extern char current_path[511];
 extern int selected;
 extern char **file_arr;
-extern char *isfile_arr;
+extern bool *isfile_arr;
 extern int size_of_file_array;
 extern int scroll;
 extern PrintConsole topScreen;

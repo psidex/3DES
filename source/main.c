@@ -10,7 +10,7 @@ int selected = 0;
 // A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)
 char **file_arr;
 // Same as file_arr, will be used "alongside" file_arr to check whether something is a file or directory
-char *isfile_arr;
+bool *isfile_arr;
 // Size of file name array
 int size_of_file_array;
 // Used to offset what is printed from the file array, to allow "scrolling"

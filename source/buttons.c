@@ -2,6 +2,7 @@
 #include "dir.h"
 #include "draw.h"
 #include "delete.h"
+#include "hex.h"
 
 void up(void) {
     if (size_of_file_array == 0){ ; }
@@ -67,11 +68,15 @@ void a_pressed(void) {
     if (size_of_file_array == 0){ ; }
 
     else {
+        char temp_path[MAX_PATH_SIZE];
+        strcpy(temp_path, current_path);
+        strcat(temp_path, file_arr[selected+scroll]);
+
         // If it is actually a directory
         if (!isfile_arr[selected+scroll]) {
             printf("path is dir\n");
-            strcat(current_path, file_arr[selected+scroll]);
-            strcat(current_path, "/");
+            strcat(temp_path, "/");
+            strcpy(current_path, temp_path);
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
             print_all_values_in_filear();
@@ -79,15 +84,7 @@ void a_pressed(void) {
 
         else {
             printf("path is file\n");
-            consoleInit(GFX_TOP, &topScreen);
-            consoleSelect(&topScreen);
-            printf("This is placeholder text\nPress B to go back");
-
-            while (1) {
-                hidScanInput();
-                u32 exitkDown = hidKeysDown();
-                if (exitkDown & KEY_B) { break; }
-            }
+            start_hex(temp_path);
             print_all_values_in_filear();
         }
     }

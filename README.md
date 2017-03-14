@@ -26,10 +26,11 @@ possibility of being added at a future date but are not definitely going to be i
 
 # TODO
 - Check if memory has been allocated correctly after `malloc` & `realloc`
+- Use [`strncpy()`](https://www.tutorialspoint.com/c_standard_library/c_function_strncpy.htm) instead of `strcpy()` to prevent overflow
 - Fast scroll if you hold up/down
 - Be able to select a file with Y then copy/paste to another path
 - Put directories at the top of the list, files at the bottom
-- Get a nice icon for .SMDH file
+- Show hex of file when selected and A pressed
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
