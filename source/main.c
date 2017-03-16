@@ -62,6 +62,16 @@ int main(int argc, char **argv) {
         gspWaitForVBlank();
         hidScanInput();
 
+        /*
+        consoleSelect(&topScreen);
+        printf("\x1b[2J");
+
+        Sets the cursor to the top left of the screen, meaning the screen does not have to be cleared
+        (which means no flickering) and because all strings are forced to be the same length (in draw.c)
+        re-drawing the whole thing does not leave any artefacts behind. The screen has to be cleared
+        if the directory is changed, otherwise text will be left on screen.
+        */
+
         u32 kDown = hidKeysDown();
 
         if (kDown & KEY_START) { break; }
@@ -92,28 +102,38 @@ int main(int argc, char **argv) {
             strcpy(current_path, "sdmc:/");
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
+            consoleSelect(&topScreen);
+            printf("\x1b[2J");
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_A) {
+            consoleSelect(&topScreen);
+            printf("\x1b[2J");
             a_pressed();
         }
 
         else if (kDown & KEY_B) {
             b_pressed();
             get_all_in_dir(current_path);
+            consoleSelect(&topScreen);
+            printf("\x1b[2J");
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_L ) {
             l_pressed();
             get_all_in_dir(current_path);
+            consoleSelect(&topScreen);
+            printf("\x1b[2J");
             print_all_values_in_filear();
         }
 
         else if (kDown & KEY_R ) {
             r_pressed();
             get_all_in_dir(current_path);
+            consoleSelect(&topScreen);
+            printf("\x1b[2J");
             print_all_values_in_filear();
         }
 
