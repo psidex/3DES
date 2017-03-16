@@ -108,8 +108,6 @@ int main(int argc, char **argv) {
         }
 
         else if (kDown & KEY_A) {
-            consoleSelect(&topScreen);
-            printf("\x1b[2J");
             a_pressed();
         }
 
@@ -131,10 +129,6 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_R ) {
             r_pressed();
-            get_all_in_dir(current_path);
-            consoleSelect(&topScreen);
-            printf("\x1b[2J");
-            print_all_values_in_filear();
         }
 
         // Flush and swap framebuffers

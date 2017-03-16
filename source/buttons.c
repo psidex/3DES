@@ -63,11 +63,13 @@ void right(void){
 }
 
 void a_pressed(void) {
-    consoleSelect(&debugscreen);
-
     if (size_of_file_array == 0){ ; }
 
     else {
+        consoleSelect(&topScreen);
+        printf("\x1b[2J");
+
+        consoleSelect(&debugscreen);
         char temp_path[MAX_PATH_SIZE];
         strcpy(temp_path, current_path);
         strcat(temp_path, file_arr[selected+scroll]);
@@ -132,19 +134,26 @@ void l_pressed(void) {
 }
 
 void r_pressed(void) {
-    consoleInit(GFX_TOP, &topScreen);
-    consoleSelect(&topScreen);
-    printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
-    printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
+    if (size_of_file_array == 0){ ; }
 
-    while (1) {
-        hidScanInput();
-        u32 exitkDown = hidKeysDown();
-        if (exitkDown & KEY_A) {
-            delete_selected();
-            break;
+    else {
+        consoleInit(GFX_TOP, &topScreen);
+        consoleSelect(&topScreen);
+        printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
+        printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
+
+        while (1) {
+            hidScanInput();
+            u32 exitkDown = hidKeysDown();
+            if (exitkDown & KEY_A) {
+                delete_selected();
+                break;
+            }
+            else if (exitkDown & KEY_B) { break; }
         }
-        else if (exitkDown & KEY_B) { break; }
+        get_all_in_dir(current_path);
+        consoleSelect(&topScreen);
+        printf("\x1b[2J");
+        print_all_values_in_filear();
     }
-    print_all_values_in_filear();
 }

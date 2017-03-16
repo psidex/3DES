@@ -31,6 +31,9 @@ possibility of being added at a future date but are not definitely going to be i
 - Be able to select a file with Y then copy/paste to another path
 - Put directories at the top of the list, files at the bottom
 - Show hex of file when selected and A pressed
+- Stop screen flickering when changing directory (Note to self: create function that
+  uses `\x1b[2J` and then prints empty chars*size of what is on screen) to clear screen
+  instead of using the clear screen escape sequence
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
