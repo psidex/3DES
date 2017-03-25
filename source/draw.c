@@ -7,9 +7,8 @@ void print_all_values_in_filear(void) {
     if (size_of_file_array < MAX_FILES_ON_SCREEN) { max_files_to_print = size_of_file_array; }
     else { max_files_to_print = MAX_FILES_ON_SCREEN; }
 
-    //consoleInit(GFX_TOP, &topScreen);
     consoleSelect(&topScreen);
-    // Clear the screen (using escape sequence)
+    // Moves the cursor to the top left corner of the screen
     printf("\x1b[0;0H");
 
     if (max_files_to_print > 0) {
@@ -40,4 +39,16 @@ void print_all_values_in_filear(void) {
         else { printf("\n\n    "); }
     }
     else { printf("\n\n\t\t\x1b[47;30m- Folder is empty -\x1b[0m"); }
+}
+
+// Clear the screen
+void clearscrn(void) {
+    int i;
+    consoleSelect(&topScreen);
+    // Set cursor to top left
+    printf("\x1b[0;0H");
+    // Fill the screen with blank spaces
+    for (i=0; i<37; i++) { printf("%-40.40s", " "); }
+    // Set cursor to top left (again)
+    printf("\x1b[0;0H");
 }

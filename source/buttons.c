@@ -67,7 +67,7 @@ void a_pressed(void) {
 
     else {
         consoleSelect(&topScreen);
-        printf("\x1b[2J");
+        clearscrn();
 
         consoleSelect(&debugscreen);
         char temp_path[MAX_PATH_SIZE];
@@ -99,6 +99,11 @@ void b_pressed(void) {
 
     // move up a directory
     else { get_ud(); }
+
+    get_all_in_dir(current_path);
+    consoleSelect(&topScreen);
+    clearscrn();
+    print_all_values_in_filear();
 }
 
 void l_pressed(void) {
@@ -131,6 +136,11 @@ void l_pressed(void) {
     else {
         printf("\x1b[31mError: Directory creation failed\x1b[0m\n");
     }
+
+    get_all_in_dir(current_path);
+    consoleSelect(&topScreen);
+    clearscrn();
+    print_all_values_in_filear();
 }
 
 void r_pressed(void) {
