@@ -12,7 +12,7 @@ void delete_dir_recursivley(char path_to_delete[MAX_PATH_SIZE]) {
         char new_path_to_delete[MAX_PATH_SIZE];
 
         while ((dir = readdir(d)) != NULL) {
-            strcpy(new_path_to_delete, path_to_delete);
+            strncpy(new_path_to_delete, path_to_delete, MAX_PATH_SIZE);
             strcat(new_path_to_delete, "/");
             strcat(new_path_to_delete, dir->d_name);
 
@@ -35,7 +35,7 @@ void delete_selected(void) {
     consoleSelect(&debugscreen);
 
     char filepath[MAX_PATH_SIZE];
-    strcpy(filepath, current_path);
+    strncpy(filepath, current_path, MAX_PATH_SIZE);
     strcat(filepath, file_arr[selected+scroll]);
 
     int ret;

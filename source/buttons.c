@@ -71,14 +71,14 @@ void a_pressed(void) {
 
         consoleSelect(&debugscreen);
         char temp_path[MAX_PATH_SIZE];
-        strcpy(temp_path, current_path);
+        strncpy(temp_path, current_path, MAX_PATH_SIZE);
         strcat(temp_path, file_arr[selected+scroll]);
 
         // If it is actually a directory
         if (!isfile_arr[selected+scroll]) {
             printf("path is dir\n");
             strcat(temp_path, "/");
-            strcpy(current_path, temp_path);
+            strncpy(current_path, temp_path, MAX_PATH_SIZE);
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
             print_all_values_in_filear();
@@ -120,7 +120,7 @@ void l_pressed(void) {
 
     // Create the path to be test/created
     char path_to_create[MAX_PATH_SIZE];
-    strcpy(path_to_create, current_path);
+    strncpy(path_to_create, current_path, MAX_PATH_SIZE);
     strcat(path_to_create, newdirname);
 
     printf("\x1b[32mpath to create: %s\x1b[0m\n", path_to_create);

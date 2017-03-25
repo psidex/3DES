@@ -6,7 +6,7 @@ void get_ud(void) {
     consoleSelect(&debugscreen);
 
     char path_to_iterate[MAX_PATH_SIZE];
-    strcpy(path_to_iterate, current_path);
+    strncpy(path_to_iterate, current_path, MAX_PATH_SIZE);
 
     char looking_for[] = "/";
     char *token;
@@ -26,7 +26,7 @@ void get_ud(void) {
 
         if(strstr(dummy1, current_path) != NULL) {
             // dummy2 happens after this, so will have 1 less token
-            strcpy(current_path, dummy2);
+            strncpy(current_path, dummy2, MAX_PATH_SIZE);
             break;
         }
 
@@ -79,7 +79,7 @@ void get_all_in_dir(char dir_to_show[]) {
         // Iterate over dir again, this time adding filenames to created 2D array
         while ((ndir = readdir(nd)) != NULL) {
             // Get d_name from the dir struct and copy into array
-            strcpy(file_arr[count], ndir->d_name);
+            strncpy(file_arr[count], ndir->d_name, MAX_DIR_NAME_SIZE);
             // If d_type is a file
             isfile_arr[count] = (ndir->d_type == 8);
             count++;
