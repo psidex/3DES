@@ -29,3 +29,4 @@ extern PrintConsole debugscreen;
 extern int MAX_DIR_NAME_SIZE;
 extern int MAX_FILES_ON_SCREEN;
 extern int MAX_PATH_SIZE;
+extern bool quit_for_err;

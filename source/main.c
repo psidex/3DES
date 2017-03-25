@@ -23,6 +23,8 @@ int MAX_DIR_NAME_SIZE = 261;
 int MAX_FILES_ON_SCREEN = 26;
 // ^
 int MAX_PATH_SIZE = 511;
+// Closes the main loop if an error happens
+bool quit_for_err = false;
 
 int main(int argc, char **argv) {
 
@@ -47,14 +49,23 @@ int main(int argc, char **argv) {
     file_arr = malloc(1 * sizeof(char*));
     isfile_arr = malloc(1 * sizeof(bool));
 
+    if ((file_arr == NULL) || (isfile_arr == NULL) ) {
+        // Malloc failed, deal with it
+        consoleSelect(&debugscreen);
+        printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
+        quit_for_err = true;
+    }
+
     // For when it is first realloc(ed)
     size_of_file_array = 1;
 
     strcpy(current_path, "sdmc:/");
 
-    get_all_in_dir(current_path);      // Fill file name array with file names
+    // Fill file name array with file names
+    get_all_in_dir(current_path);
 
-    print_all_values_in_filear();      // Print all in /
+    // Print all in root dir
+    print_all_values_in_filear();
 
     // Main loop
     while (aptMainLoop()) {
@@ -62,16 +73,23 @@ int main(int argc, char **argv) {
         gspWaitForVBlank();
         hidScanInput();
 
+        // TODO: Add a wait or something like that
+        // so that the user sees the error message
+        if (quit_for_err) { break; }
+
         u32 kDown = hidKeysDown();
+        u32 kHeld = hidKeysHeld();
+
+        if (kDown) { t = osGetTime(); }
 
         if (kDown & KEY_START) { break; }
 
-        else if (kDown & KEY_UP) {
+        else if ((kDown & KEY_UP) || ((kHeld & KEY_UP) && (osGetTime() - t > 500))) {
             up();
             print_all_values_in_filear();
         }
 
-        else if (kDown & KEY_DOWN) {
+        else if ((kDown & KEY_DOWN) || ((kHeld & KEY_DOWN) && (osGetTime() - t > 500))) {
             down();
             print_all_values_in_filear();
         }

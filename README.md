@@ -25,9 +25,6 @@ possibility of being added at a future date but are not definitely going to be i
 - START to close app and go back to HB menu
 
 # TODO
-- Check if memory has been allocated correctly after `malloc` & `realloc`
-- Use [`strncpy()`](https://www.tutorialspoint.com/c_standard_library/c_function_strncpy.htm) instead of `strcpy()` to prevent overflow
-- Fast scroll if you hold up/down
 - Be able to select a file with Y then copy/paste to another path
 - Show hex of file when selected and A pressed
 

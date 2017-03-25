@@ -76,6 +76,15 @@ void get_all_in_dir(char dir_to_show[]) {
         for (int i = 0; i < size_of_file_array; i++) { file_arr[i] = malloc((MAX_DIR_NAME_SIZE+1) * sizeof(char)); }
         isfile_arr = realloc(isfile_arr, (size_of_file_array+1) * sizeof(bool));
 
+        if ((file_arr == NULL) || (isfile_arr == NULL) ) {
+            // Malloc failed, deal with it
+            consoleSelect(&debugscreen);
+            printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
+            quit_for_err = true;
+            // Correct place to use break?
+            break;
+        }
+
         // Iterate over dir again, this time adding filenames to created 2D array
         while ((ndir = readdir(nd)) != NULL) {
             // Get d_name from the dir struct and copy into array
