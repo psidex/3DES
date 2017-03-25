@@ -25,6 +25,8 @@ int MAX_FILES_ON_SCREEN = 26;
 int MAX_PATH_SIZE = 511;
 // Closes the main loop if an error happens
 bool quit_for_err = false;
+// For fast scroll
+int t;
 
 int main(int argc, char **argv) {
 
@@ -78,18 +80,15 @@ int main(int argc, char **argv) {
         if (quit_for_err) { break; }
 
         u32 kDown = hidKeysDown();
-        u32 kHeld = hidKeysHeld();
-
-        if (kDown) { t = osGetTime(); }
 
         if (kDown & KEY_START) { break; }
 
-        else if ((kDown & KEY_UP) || ((kHeld & KEY_UP) && (osGetTime() - t > 500))) {
+        else if (kDown & KEY_UP) {
             up();
             print_all_values_in_filear();
         }
 
-        else if ((kDown & KEY_DOWN) || ((kHeld & KEY_DOWN) && (osGetTime() - t > 500))) {
+        else if (kDown & KEY_DOWN) {
             down();
             print_all_values_in_filear();
         }

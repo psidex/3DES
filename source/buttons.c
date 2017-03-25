@@ -87,7 +87,6 @@ void a_pressed(void) {
         else {
             printf("path is file\n");
             start_hex(temp_path);
-            print_all_values_in_filear();
         }
     }
 }

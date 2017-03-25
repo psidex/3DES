@@ -25,6 +25,7 @@ possibility of being added at a future date but are not definitely going to be i
 - START to close app and go back to HB menu
 
 # TODO
+- Fast scroll if you hold up/down
 - Be able to select a file with Y then copy/paste to another path
 - Show hex of file when selected and A pressed
 

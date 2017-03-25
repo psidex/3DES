@@ -81,8 +81,7 @@ void get_all_in_dir(char dir_to_show[]) {
             consoleSelect(&debugscreen);
             printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
             quit_for_err = true;
-            // Correct place to use break?
-            break;
+            // TODO: "break" out of this for loop
         }
 
         // Iterate over dir again, this time adding filenames to created 2D array
