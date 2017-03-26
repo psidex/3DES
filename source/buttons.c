@@ -112,11 +112,11 @@ void l_pressed(void) {
 
     SwkbdState swkbd;
     char newdirname[260];
-    SwkbdButton button = SWKBD_BUTTON_NONE;
+    // SwkbdButton button = SWKBD_BUTTON_NONE;
 
     swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, 260);
     swkbdSetHintText(&swkbd, "New directory name here");
-    button = swkbdInputText(&swkbd, newdirname, sizeof(newdirname));
+    swkbdInputText(&swkbd, newdirname, sizeof(newdirname));
 
     // Create the path to be test/created
     char path_to_create[MAX_PATH_SIZE];
@@ -152,7 +152,9 @@ void r_pressed(void) {
         printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
         printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
-        while (1) {
+        // TODO: Fix: Closing the lid while this loop is active
+        // causes the 3ds to not "wake up"
+        while (aptMainLoop()) {
             hidScanInput();
             u32 exitkDown = hidKeysDown();
             if (exitkDown & KEY_A) {
