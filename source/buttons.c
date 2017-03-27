@@ -7,11 +7,11 @@
 void up(void) {
     if (size_of_file_array == 0){ ; }
 
-    // if selected is 0 and there is no scroll, skip to the bottom
+    // If selected is 0 and there is no scroll, skip to the bottom
     else if (selected+scroll == 0) {
         // If there is a need for scroll
         if (size_of_file_array > MAX_FILES_ON_SCREEN) {
-            // arrays are 0 indexed, so max files -1 = highest index of array shown
+            // Arrays are 0 indexed, so max files -1 = highest index of array shown
             selected = MAX_FILES_ON_SCREEN-1;
             // scroll will be max size it can be
             scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
@@ -41,11 +41,7 @@ void down(void) {
 
 void left(void) {
     if (size_of_file_array == 0){ ; }
-    // If selected+scroll are at the largest index of the file array (arrays are 0 indexed!)
-    else {
-        selected = 0;
-        scroll = 0;
-    }
+    else { selected = 0; scroll = 0; }
 }
 
 void right(void){
@@ -64,7 +60,6 @@ void right(void){
 
 void a_pressed(void) {
     if (size_of_file_array == 0){ ; }
-
     else {
         consoleSelect(&topScreen);
         clearscrn();
@@ -106,13 +101,26 @@ void b_pressed(void) {
     print_all_values_in_filear();
 }
 
+// Copy path to selected file/dir into var
+void y_pressed(void) {
+    consoleSelect(&debugscreen);
+    if (size_of_file_array == 0){ printf("\x1b[32mCannot copy from empty dir\x1b[0m\n"); }
+
+    else if (isfile_arr[selected+scroll]) {
+        strncpy(clipboard, current_path, MAX_PATH_SIZE);
+        strcat(clipboard, file_arr[selected+scroll]);
+        printf("\x1b[32mPath copied to clipboard\x1b[0m\n");
+    }
+
+    else { printf("\x1b[32mCopying directories not supported\x1b[0m\n"); }
+}
+
 void l_pressed(void) {
     consoleSelect(&debugscreen);
     printf("Bringing up keyboard...\n");
 
     SwkbdState swkbd;
-    char newdirname[260];
-    // SwkbdButton button = SWKBD_BUTTON_NONE;
+    char newdirname[MAX_DIR_NAME_SIZE];
 
     swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, 260);
     swkbdSetHintText(&swkbd, "New directory name here");

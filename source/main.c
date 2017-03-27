@@ -3,30 +3,22 @@
 #include "draw.h"
 #include "buttons.h"
 
-// contains current path
 char current_path[511];
-// selected file
 int selected = 0;
-// A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)
+int scroll   = 0;
+
 char **file_arr;
-// Same as file_arr, will be used "alongside" file_arr to check whether something is a file or directory
 bool *isfile_arr;
-// Size of file name array
 int size_of_file_array;
-// Used to offset what is printed from the file array, to allow "scrolling"
-int scroll = 0;
-// One PrintConsole for each screen
+
 PrintConsole topScreen, instructionscreen, debugscreen;
-// Max len of file/directory name
-int MAX_DIR_NAME_SIZE = 261;
-// What it says on the tin
+
+int MAX_DIR_NAME_SIZE   = 261;
 int MAX_FILES_ON_SCREEN = 26;
-// ^
-int MAX_PATH_SIZE = 511;
-// Closes the main loop if an error happens
+int MAX_PATH_SIZE       = 511;
+
 bool quit_for_err = false;
-// For fast scroll
-int t;
+char clipboard[511];
 
 int main(int argc, char **argv) {
 
@@ -37,11 +29,12 @@ int main(int argc, char **argv) {
     consoleInit(GFX_BOTTOM, &debugscreen);
     consoleInit(GFX_BOTTOM, &instructionscreen);
 
-    consoleSetWindow(&instructionscreen, 0, 0, 40, 8);
-    consoleSetWindow(&debugscreen, 0, 9, 40, 21);
+    // Set position of these 2 windows
+    consoleSetWindow(&instructionscreen, 0, 0, 40, 9);
+    consoleSetWindow(&debugscreen, 0, 10, 40, 20);
 
     consoleSelect(&instructionscreen);
-    printf("A - Change Directory\nB - go up a directory\nX - CD to / and reallocate mem\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
+    printf("A - Change Directory\nB - go up a directory\nX - CD to / and reallocate mem\nY - Copy/paste file\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
     printf("\n----------------------------------------");
 
     consoleSelect(&debugscreen);
@@ -120,6 +113,10 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_B) {
             b_pressed();
+        }
+
+        else if (kDown & KEY_Y) {
+            y_pressed();
         }
 
         else if (kDown & KEY_L ) {
