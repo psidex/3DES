@@ -107,25 +107,11 @@ int main(int argc, char **argv) {
             print_all_values_in_filear();
         }
 
-        else if (kDown & KEY_A) {
-            a_pressed();
-        }
-
-        else if (kDown & KEY_B) {
-            b_pressed();
-        }
-
-        else if (kDown & KEY_Y) {
-            y_pressed();
-        }
-
-        else if (kDown & KEY_L ) {
-            l_pressed();
-        }
-
-        else if (kDown & KEY_R ) {
-            r_pressed();
-        }
+        else if (kDown & KEY_A) { a_pressed(); }
+        else if (kDown & KEY_B) { b_pressed(); }
+        else if (kDown & KEY_Y) { y_pressed(); }
+        else if (kDown & KEY_L) { l_pressed(); }
+        else if (kDown & KEY_R) { r_pressed(); }
 
         // Flush and swap framebuffers
         gfxFlushBuffers();

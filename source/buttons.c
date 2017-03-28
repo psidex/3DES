@@ -4,6 +4,9 @@
 #include "delete.h"
 #include "hex.h"
 
+// TODO: Fix: Closing the lid while a new aptMainLoop
+// loop is active causes the 3ds to not "wake up"
+
 void up(void) {
     if (size_of_file_array == 0){ ; }
 
@@ -101,11 +104,35 @@ void b_pressed(void) {
     print_all_values_in_filear();
 }
 
+// NOT FINISHED
 // Copy path to selected file/dir into var
 void y_pressed(void) {
     consoleSelect(&debugscreen);
+
     if (size_of_file_array == 0){ printf("\x1b[32mCannot copy from empty dir\x1b[0m\n"); }
 
+    else if ((isfile_arr[selected+scroll]) && ()) { // && something in clipboard
+
+        consoleSelect(&topScreen);
+        printf("\n\n\n\t\tCopy or paste?", file_arr[selected+scroll]);
+        printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste");
+        consoleSelect(&debugscreen);
+
+        while (aptMainLoop()) {
+            hidScanInput();
+            u32 exitkDown = hidKeysDown();
+            if (exitkDown & KEY_A) {
+                strncpy(clipboard, current_path, MAX_PATH_SIZE);
+                strcat(clipboard, file_arr[selected+scroll]);
+                printf("\x1b[32mPath copied to clipboard\x1b[0m\n");
+                break;
+            }
+
+            else if (exitkDown & KEY_B) { break; } // Paste
+        }
+    }
+
+    // Nothing in clipboard so you can only copy into it
     else if (isfile_arr[selected+scroll]) {
         strncpy(clipboard, current_path, MAX_PATH_SIZE);
         strcat(clipboard, file_arr[selected+scroll]);
@@ -155,7 +182,7 @@ void r_pressed(void) {
     if (size_of_file_array == 0){ ; }
 
     else {
-        consoleInit(GFX_TOP, &topScreen);
+        clearscrn();
         consoleSelect(&topScreen);
         printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
         printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
