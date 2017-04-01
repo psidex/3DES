@@ -18,7 +18,8 @@ int MAX_FILES_ON_SCREEN = 26;
 int MAX_PATH_SIZE       = 511;
 
 bool quit_for_err = false;
-char clipboard[511];
+
+CB clipboard;
 
 int main(int argc, char **argv) {
 

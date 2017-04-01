@@ -3,6 +3,7 @@
 #include "draw.h"
 #include "delete.h"
 #include "hex.h"
+#include "clipboard.h"
 
 // TODO: Fix: Closing the lid while a new aptMainLoop
 // loop is active causes the 3ds to not "wake up"
@@ -99,45 +100,40 @@ void b_pressed(void) {
     else { get_ud(); }
 
     get_all_in_dir(current_path);
-    consoleSelect(&topScreen);
     clearscrn();
     print_all_values_in_filear();
 }
 
-// NOT FINISHED
-// Copy path to selected file/dir into var
 void y_pressed(void) {
     consoleSelect(&debugscreen);
 
     if (size_of_file_array == 0){ printf("\x1b[32mCannot copy from empty dir\x1b[0m\n"); }
 
-    else if ((isfile_arr[selected+scroll]) && ()) { // && something in clipboard
+    else if ((isfile_arr[selected+scroll]) && (strcmp(clipboard.filename, ""))) {
 
         consoleSelect(&topScreen);
-        printf("\n\n\n\t\tCopy or paste?", file_arr[selected+scroll]);
+        printf("\n\n\n\t\tCopy or paste?");
         printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste");
         consoleSelect(&debugscreen);
 
         while (aptMainLoop()) {
             hidScanInput();
             u32 exitkDown = hidKeysDown();
+
             if (exitkDown & KEY_A) {
-                strncpy(clipboard, current_path, MAX_PATH_SIZE);
-                strcat(clipboard, file_arr[selected+scroll]);
-                printf("\x1b[32mPath copied to clipboard\x1b[0m\n");
+                copy_selected();
                 break;
             }
 
-            else if (exitkDown & KEY_B) { break; } // Paste
+            else if (exitkDown & KEY_B) {
+                paste();
+                break;
+            }
         }
     }
 
     // Nothing in clipboard so you can only copy into it
-    else if (isfile_arr[selected+scroll]) {
-        strncpy(clipboard, current_path, MAX_PATH_SIZE);
-        strcat(clipboard, file_arr[selected+scroll]);
-        printf("\x1b[32mPath copied to clipboard\x1b[0m\n");
-    }
+    else if (isfile_arr[selected+scroll]) { copy_selected(); }
 
     else { printf("\x1b[32mCopying directories not supported\x1b[0m\n"); }
 }
