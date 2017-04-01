@@ -97,11 +97,12 @@ void b_pressed(void) {
     if (!strcmp(current_path, "sdmc:/")) { printf("\x1b[32mcurrently in sdmc:/\x1b[0m\n"); }
 
     // move up a directory
-    else { get_ud(); }
-
-    get_all_in_dir(current_path);
-    clearscrn();
-    print_all_values_in_filear();
+    else {
+        get_ud();
+        get_all_in_dir(current_path);
+        clearscrn();
+        print_all_values_in_filear();
+    }
 }
 
 void y_pressed(void) {
@@ -109,12 +110,14 @@ void y_pressed(void) {
 
     if (size_of_file_array == 0){ printf("\x1b[32mCannot copy from empty dir\x1b[0m\n"); }
 
-    else if ((isfile_arr[selected+scroll]) && (strcmp(clipboard.filename, ""))) {
-
+    else if (strcmp(clipboard.filename, "")) {
         consoleSelect(&topScreen);
+        clearscrn();
         printf("\n\n\n\t\tCopy or paste?");
         printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste");
-        consoleSelect(&debugscreen);
+
+        // TODO: Find correct numbers for the %-25.25s
+        printf("\n\n\n\t\tName of file in clipboard:\n\n\t\t%-25.25s", clipboard.filename);
 
         while (aptMainLoop()) {
             hidScanInput();
@@ -124,18 +127,20 @@ void y_pressed(void) {
                 copy_selected();
                 break;
             }
-
             else if (exitkDown & KEY_B) {
                 paste();
                 break;
             }
         }
+
+        // Paste has get_all_in_dir() in it
+        consoleSelect(&topScreen);
+        clearscrn();
+        print_all_values_in_filear();
     }
 
     // Nothing in clipboard so you can only copy into it
-    else if (isfile_arr[selected+scroll]) { copy_selected(); }
-
-    else { printf("\x1b[32mCopying directories not supported\x1b[0m\n"); }
+    else { copy_selected(); }
 }
 
 void l_pressed(void) {
@@ -180,23 +185,22 @@ void r_pressed(void) {
     else {
         clearscrn();
         consoleSelect(&topScreen);
-        printf("\n\n\n\t\t\x1b[31mDelete %s?\x1b[0m", file_arr[selected+scroll]);
+        printf("\n\n\n\t\t\x1b[31mDelete %-35.35s\x1b[0m", file_arr[selected+scroll]);
         printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
-        // TODO: Fix: Closing the lid while this loop is active
-        // causes the 3ds to not "wake up"
         while (aptMainLoop()) {
             hidScanInput();
             u32 exitkDown = hidKeysDown();
             if (exitkDown & KEY_A) {
                 delete_selected();
+                get_all_in_dir(current_path);
                 break;
             }
             else if (exitkDown & KEY_B) { break; }
         }
-        get_all_in_dir(current_path);
+
         consoleSelect(&topScreen);
-        printf("\x1b[2J");
+        clearscrn();
         print_all_values_in_filear();
     }
 }

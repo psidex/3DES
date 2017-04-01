@@ -7,7 +7,6 @@
 #include <unistd.h> // rmdir()
 #include <3ds.h>    // Main 3ds lib (libctru)
 
-
 // Notes:
 
 // According to Wikipedia, the max FAT32 path length is 255 UTF-16 characters,

@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
     gfxInitDefault();
 
-    // Initialize console for both screens using the two different PrintConsole
+    // Initialize console for both screens using the 3 different PrintConsole
     consoleInit(GFX_TOP, &topScreen);
     consoleInit(GFX_BOTTOM, &debugscreen);
     consoleInit(GFX_BOTTOM, &instructionscreen);
