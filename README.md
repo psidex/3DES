@@ -27,7 +27,7 @@ possibility of being added at a future date but are not definitely going to be i
 - START to close app and go back to HB menu
 
 # TODO
-- Fix closing lid on delete screen causing 3ds to not wake up
+- Fix closing lid on delete screen causing 3ds to not wake up in certain situations
 - Fast scroll if you hold up/down
 - Be able to select a file with Y then copy/paste to another path
 - Show hex of file when selected and A pressed

@@ -2,7 +2,6 @@
 #include "dir.h"
 #include "draw.h"
 #include "delete.h"
-#include "hex.h"
 #include "clipboard.h"
 
 // TODO: Fix: Closing the lid while a new aptMainLoop
@@ -65,28 +64,24 @@ void right(void){
 void a_pressed(void) {
     if (size_of_file_array == 0){ ; }
     else {
-        consoleSelect(&topScreen);
-        clearscrn();
-
-        consoleSelect(&debugscreen);
-        char temp_path[MAX_PATH_SIZE];
-        strncpy(temp_path, current_path, MAX_PATH_SIZE);
-        strcat(temp_path, file_arr[selected+scroll]);
-
         // If it is actually a directory
         if (!isfile_arr[selected+scroll]) {
+            consoleSelect(&topScreen);
+            clearscrn();
+
+            strcat(current_path, file_arr[selected+scroll]);
+            strcat(current_path, "/");
+
+            consoleSelect(&debugscreen);
             printf("path is dir\n");
-            strcat(temp_path, "/");
-            strncpy(current_path, temp_path, MAX_PATH_SIZE);
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
+
             get_all_in_dir(current_path);
             print_all_values_in_filear();
         }
 
         else {
             printf("path is file\n");
-            start_hex(temp_path);
-            print_all_values_in_filear();
         }
     }
 }
