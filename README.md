@@ -20,6 +20,7 @@ possibility of being added at a future date but are not definitely going to be i
 - A - Change to selected directory (opening files not supported)
 - B - go "up" a directory
 - X - CD to `/` and reallocate memory
+- Y - Select file (not directory) then copy/paste to another path
 - L - Create a new directory (brings a keyboard up to type the name)
 - R - Delete file/directory
 - DPAD/Circle pad up and down control the selection of files/directories
@@ -29,8 +30,6 @@ possibility of being added at a future date but are not definitely going to be i
 # TODO
 - Fix closing lid on delete screen causing 3ds to not wake up in certain situations
 - Fast scroll if you hold up/down
-- Be able to select a file with Y then copy/paste to another path
-- Show hex of file when selected and A pressed
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
