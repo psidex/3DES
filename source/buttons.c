@@ -81,6 +81,7 @@ void a_pressed(void) {
         }
 
         else {
+            consoleSelect(&debugscreen);
             printf("path is file\n");
         }
     }
@@ -109,7 +110,7 @@ void y_pressed(void) {
         consoleSelect(&topScreen);
         clearscrn();
         printf("\n\n\n\t\tCopy or paste?");
-        printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste");
+        printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste\n\t\t[X] - Cancel");
 
         // TODO: Find correct numbers for the %-25.25s
         printf("\n\n\n\t\tName of file in clipboard:\n\n\t\t%-25.25s", clipboard.filename);
@@ -124,6 +125,9 @@ void y_pressed(void) {
             }
             else if (exitkDown & KEY_B) {
                 paste();
+                break;
+            }
+            else if (exitkDown & KEY_X) {
                 break;
             }
         }
