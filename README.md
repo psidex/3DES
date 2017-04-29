@@ -3,15 +3,12 @@ A (simple) homebrew 3ds File Browser written in C
 
  - Top screen - main file Browser
  - Upper area of bottom screen - instructions
- - Lower area of bottom screen - debug output (look here if, for example, you try
-to create a directory and nothing happens)
+ - Lower area of bottom screen - debug output (look here if, for example, you try to create a directory and nothing happens)
 
 # Notes/Warnings
-- Closing the lid (only tested on n3ds) whilst on the delete screen causes the 3ds
-to not "wake up", and you have to press and hold the power button to turn it off
-- Deleting directories uses a recursive function, so if you have a large (very large)
-amount of directories/files inside the directory you want to delete, it may end up
-breaking
+- Closing the lid (only tested on n3ds) whilst on the delete screen causes the 3ds to not "wake up", and you have to press and hold the power button to turn it off
+- Deleting directories uses a recursive function, so if you have a large (very large) amount of directories/files inside the directory you want to delete, it may end up breaking
+- Copy/Paste is still quite experimental, and you may accidentally erase files you try to copy
 
 # Buttons
 Things in the buttons list below that are labelled as `not supported` have the
