@@ -29,6 +29,7 @@ possibility of being added at a future date but are not definitely going to be i
 - Fast scroll if you hold up/down
 - Fix copy/pasting same file in same directory
 - Fix pasting into empty directories
+- Show a message when file/dir successfully deleted
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
