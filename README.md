@@ -8,7 +8,7 @@ A (simple) homebrew 3ds File Browser written in C
 # Notes/Warnings
 - Closing the lid (only tested on n3ds) whilst on the delete screen causes the 3ds to not "wake up", and you have to press and hold the power button to turn it off
 - Deleting directories uses a recursive function, so if you have a large (very large) amount of directories/files inside the directory you want to delete, it may end up breaking
-- Copy/Paste is still quite experimental, and you may accidentally erase files you try to copy
+- Copy/Paste is still quite experimental, if you copy a file then paste it in the same directory as you copied it, it will erase the file
 
 # Buttons
 Things in the buttons list below that are labelled as `not supported` have the
@@ -27,6 +27,7 @@ possibility of being added at a future date but are not definitely going to be i
 # TODO
 - Fix closing lid on delete screen causing 3ds to not wake up in certain situations
 - Fast scroll if you hold up/down
+- Fix copy/pasting same file in same directory
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
