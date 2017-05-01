@@ -73,7 +73,7 @@ void get_all_in_dir(char dir_to_show[]) {
         // Create an array of pointers the size of the amount of files in the chosen directory
         file_arr = realloc(file_arr, (size_of_file_array+1) * sizeof(char*));
         // Set each pointer inside the array to point to a char
-        for (int i = 0; i < size_of_file_array; i++) { file_arr[i] = malloc((MAX_DIR_NAME_SIZE+1) * sizeof(char)); }
+        for (int i = 0; i < size_of_file_array; i++) { file_arr[i] = malloc(MAX_DIR_NAME_SIZE * sizeof(char)); }
         isfile_arr = realloc(isfile_arr, (size_of_file_array+1) * sizeof(bool));
 
         if ((file_arr == NULL) || (isfile_arr == NULL) ) {
@@ -81,19 +81,19 @@ void get_all_in_dir(char dir_to_show[]) {
             consoleSelect(&debugscreen);
             printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
             quit_for_err = true;
-            // TODO: "break" out of this for loop
         }
-
-        // Iterate over dir again, this time adding filenames to created 2D array
-        while ((ndir = readdir(nd)) != NULL) {
-            // Get d_name from the dir struct and copy into array
-            strncpy(file_arr[count], ndir->d_name, MAX_DIR_NAME_SIZE);
-            // If d_type is a file
-            isfile_arr[count] = (ndir->d_type == 8);
-            count++;
+        else {
+            // Iterate over dir again, this time adding filenames to created 2D array
+            while ((ndir = readdir(nd)) != NULL) {
+                // Get d_name from the dir struct and copy into array
+                strncpy(file_arr[count], ndir->d_name, MAX_DIR_NAME_SIZE);
+                // If d_type is a file
+                isfile_arr[count] = (ndir->d_type == 8);
+                count++;
+            }
+            bubble_sort_files();
         }
     }
     closedir(d);
     closedir(nd);
-    bubble_sort_files();
 }

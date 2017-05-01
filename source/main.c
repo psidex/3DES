@@ -103,7 +103,6 @@ int main(int argc, char **argv) {
             strcpy(current_path, "sdmc:/");
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
             get_all_in_dir(current_path);
-            consoleSelect(&topScreen);
             clearscrn();
             print_all_values_in_filear();
         }

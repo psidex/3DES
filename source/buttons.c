@@ -110,7 +110,7 @@ void y_pressed(void) {
         consoleSelect(&topScreen);
         clearscrn();
         printf("\n\n\n\t\tCopy or paste?");
-        printf("\n\n\t\t[A] - Copy\n\t\t[B] - Paste\n\t\t[X] - Cancel");
+        printf("\n\n\t\t[A] - Copy\n\t\t[X] - Paste\n\t\t[B] - Cancel");
 
         // TODO: Find correct numbers for the %-25.25s
         printf("\n\n\n\t\tName of file in clipboard:\n\n\t\t%-25.25s", clipboard.filename);
@@ -123,11 +123,11 @@ void y_pressed(void) {
                 copy_selected();
                 break;
             }
-            else if (exitkDown & KEY_B) {
+            else if (exitkDown & KEY_X) {
                 paste();
                 break;
             }
-            else if (exitkDown & KEY_X) {
+            else if (exitkDown & KEY_B) {
                 break;
             }
         }
