@@ -73,7 +73,6 @@ void a_pressed(void) {
             strcat(current_path, "/");
 
             consoleSelect(&debugscreen);
-            printf("path is dir\n");
             printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 
             get_all_in_dir(current_path);

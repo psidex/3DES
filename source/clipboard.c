@@ -46,9 +46,9 @@ void paste(void) {
         fseek(fp1, 0, SEEK_SET);
 
         consoleSelect(&topScreen);
-        printf("\n\n\t\tSize of file: %i\n\t\tCopying...\n", size);
+        printf("\n\n\t\tSize of file: %i bytes\n\t\tCopying...\n", size);
         consoleSelect(&debugscreen);
-        printf("Size of file: %i\nCopying...\n", size);
+        printf("Size of file: %i  bytes\nCopying...\n", size);
 
         // Have to use file_iter_count because apparently EOF
         // isn't a thing on 3DS
