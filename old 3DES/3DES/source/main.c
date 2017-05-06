@@ -19,6 +19,8 @@ int MAX_PATH_SIZE       = 511;
 
 bool quit_for_err = false;
 
+CB clipboard;
+
 int main(int argc, char **argv) {
 
     gfxInitDefault();
@@ -33,7 +35,7 @@ int main(int argc, char **argv) {
     consoleSetWindow(&debugscreen, 0, 10, 40, 20);
 
     consoleSelect(&instructionscreen);
-    printf("A - Change Directory\nB - go up a directory\nX - CD to / and reallocate mem\nY - Nothing\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
+    printf("A - Change Directory\nB - go up a directory\nX - CD to / and reallocate mem\nY - Copy/paste file\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
     printf("\n----------------------------------------");
 
     consoleSelect(&debugscreen);
@@ -107,6 +109,7 @@ int main(int argc, char **argv) {
 
         else if (kDown & KEY_A) { a_pressed(); }
         else if (kDown & KEY_B) { b_pressed(); }
+        else if (kDown & KEY_Y) { y_pressed(); }
         else if (kDown & KEY_L) { l_pressed(); }
         else if (kDown & KEY_R) { r_pressed(); }
 

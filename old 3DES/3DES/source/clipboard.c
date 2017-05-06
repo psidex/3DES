@@ -24,7 +24,7 @@ void paste(void) {
     consoleSelect(&debugscreen);
     FILE *fp1;
     FILE *fp2;
-    char a;
+    int a;
     char paste_path[MAX_PATH_SIZE];
     int file_iter_count = 0;
     int size;

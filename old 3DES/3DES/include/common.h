@@ -36,3 +36,11 @@ extern int MAX_PATH_SIZE;       // Max size of PATH
 
 extern bool quit_for_err;   // Closes the main loop if an error happens
 // extern char clipboard[511]; // Stores the latest copied path
+
+// Struct to hold clipboard things in
+typedef struct {
+   char path[511];     // Path to copy
+   char filename[261]; // Name of file to copy
+} CB;
+
+extern CB clipboard;

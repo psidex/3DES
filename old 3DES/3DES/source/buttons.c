@@ -2,6 +2,7 @@
 #include "dir.h"
 #include "draw.h"
 #include "delete.h"
+#include "clipboard.h"
 
 // TODO: Fix: Closing the lid while a new aptMainLoop
 // loop is active causes the 3ds to not "wake up"
@@ -97,6 +98,47 @@ void b_pressed(void) {
         clearscrn();
         print_all_values_in_filear();
     }
+}
+
+void y_pressed(void) {
+    consoleSelect(&debugscreen);
+
+    if (size_of_file_array == 0){ printf("\x1b[32mCannot copy from empty dir\x1b[0m\n"); }
+
+    else if (strcmp(clipboard.filename, "")) {
+        consoleSelect(&topScreen);
+        clearscrn();
+        printf("\n\n\n\t\tCopy or paste?");
+        printf("\n\n\t\t[A] - Copy\n\t\t[X] - Paste\n\t\t[B] - Cancel");
+
+        // TODO: Find correct numbers for the %-25.25s
+        printf("\n\n\n\t\tName of file in clipboard:\n\n\t\t%-25.25s", clipboard.filename);
+
+        while (aptMainLoop()) {
+            hidScanInput();
+            u32 exitkDown = hidKeysDown();
+
+            if (exitkDown & KEY_A) {
+                copy_selected();
+                break;
+            }
+            else if (exitkDown & KEY_X) {
+                paste();
+                break;
+            }
+            else if (exitkDown & KEY_B) {
+                break;
+            }
+        }
+
+        // Paste has get_all_in_dir() in it
+        consoleSelect(&topScreen);
+        clearscrn();
+        print_all_values_in_filear();
+    }
+
+    // Nothing in clipboard so you can only copy into it
+    else { copy_selected(); }
 }
 
 void l_pressed(void) {
