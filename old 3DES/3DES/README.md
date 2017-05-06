@@ -8,7 +8,8 @@ A (simple) homebrew 3ds File Browser written in C
 # Notes/Warnings
 - Closing the lid (only tested on n3ds) whilst on the delete screen causes the 3ds to not "wake up", and you have to press and hold the power button to turn it off
 - Deleting directories uses a recursive function, so if you have a large (very large) amount of directories/files inside the directory you want to delete, it may end up breaking
-- Copy/Paste is still quite experimental, if you copy a file then paste it in the same directory as you copied it, it will erase the file
+- Copy/Paste is still quite experimental, due to 32 bit limitations with `ftell()`, only files < 2gb can currently be copy/pasted
+
 
 # Buttons
 Things in the buttons list below that are labelled as `not supported` have the
