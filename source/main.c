@@ -67,13 +67,16 @@ int main(int argc, char **argv) {
     gspWaitForVBlank();
     hidScanInput();
 
-    // TODO: Add a wait or something like that
-    // so that the user sees the error message
-    if (quit_for_err) { break; }
+    if (quit_for_err) {
+      // ToDo: Add some sort of sleep here so user can read error messages
+      break;
+    }
 
     u32 kDown = hidKeysDown();
 
-    if (kDown & KEY_START) { break; }
+    if (kDown & KEY_START) {
+      break;
+    }
 
     else if (kDown & KEY_UP) {
       up();

@@ -20,7 +20,7 @@ Colours { red = error related, blue = button related, green = path related, whit
 */
 
 extern char current_path[511]; // Contains current path
-extern int selected;           // Selected file
+extern int selected;           // Selected file index
 extern int scroll;             // Used to offset what is printed from the file array, to allow "scrolling"
 
 extern char **file_arr;        // A pointer to an array which is full of pointers which will point to strings (only way to create a dynamic/resizable array)

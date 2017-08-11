@@ -7,66 +7,68 @@
 // loop is active causes the 3ds to not "wake up"
 
 void up(void) {
-  if (size_of_file_array == 0){ ; }
-
-  // If selected is 0 and there is no scroll, skip to the bottom
-  else if (selected+scroll == 0) {
-    // If there is a need for scroll
-    if (size_of_file_array > MAX_FILES_ON_SCREEN) {
-      // Arrays are 0 indexed, so max files -1 = highest index of array shown
-      selected = MAX_FILES_ON_SCREEN-1;
-      // scroll will be max size it can be
-      scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
+  if (size_of_file_array != 0) {
+    if (selected+scroll == 0) {
+      if (size_of_file_array > MAX_FILES_ON_SCREEN) {
+        selected = MAX_FILES_ON_SCREEN-1;
+        // scroll will be max size it can be
+        scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
+      }
+      else {
+        selected = size_of_file_array-1;
+      }
     }
-    else { selected = size_of_file_array-1; }
+
+    else if (scroll > 0) {
+      scroll--;
+    }
+
+    else {
+      selected--;
+    }
   }
-
-  else if (scroll > 0) { scroll--; }
-
-  else { selected--; }
 }
 
 void down(void) {
-  if (size_of_file_array == 0){ ; }
+  if (size_of_file_array != 0) {
+    if (selected+scroll == size_of_file_array-1) {
+      selected = 0;
+      scroll = 0;
+    }
 
-  // If selected+scroll are at the largest index of the file array (arrays are 0 indexed!)
-  else if (selected+scroll == size_of_file_array-1) {
-    selected = 0;
-    scroll = 0;
+    else if ((selected == MAX_FILES_ON_SCREEN-1) && (selected+scroll < size_of_file_array-1)) {
+      scroll++;
+    }
+
+    else {
+      selected++;
+    }
   }
-
-  // If selected = highest index and selected+scroll < the max index for the array
-  else if ((selected == MAX_FILES_ON_SCREEN-1) && (selected+scroll < size_of_file_array-1)) { scroll++; }
-  else { selected++; }
 }
 
 void left(void) {
-  if (size_of_file_array == 0){ ; }
-  else { selected = 0; scroll = 0; }
+  if (size_of_file_array != 0) {
+    selected = 0;
+    scroll = 0;
+  }
 }
 
-void right(void){
-  if (size_of_file_array == 0){ ; }
-  else {
-    // If there is a need for scroll
+void right(void) {
+  if (size_of_file_array != 0) {
     if (size_of_file_array > MAX_FILES_ON_SCREEN) {
-      // arrays are 0 indexed, so max files -1 = highest index of array shown
       selected = MAX_FILES_ON_SCREEN-1;
-      // scroll will be max size it can be
       scroll = size_of_file_array-MAX_FILES_ON_SCREEN;
     }
-    else { selected = size_of_file_array-1; }
+    else {
+      selected = size_of_file_array-1;
+    }
   }
 }
 
 void a_pressed(void) {
-  if (size_of_file_array == 0){ ; }
-  else {
+  if (size_of_file_array != 0) {
     // If it is actually a directory
     if (!isfile_arr[selected+scroll]) {
-      consoleSelect(&topScreen);
-      clearscrn();
-
       strcat(current_path, file_arr[selected+scroll]);
       strcat(current_path, "/");
 
@@ -74,6 +76,7 @@ void a_pressed(void) {
       printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 
       get_all_in_dir(current_path);
+      clearscrn();
       print_all_values_in_filear();
     }
 
@@ -85,10 +88,10 @@ void a_pressed(void) {
 }
 
 void b_pressed(void) {
-  consoleSelect(&debugscreen);
-
-  if (!strcmp(current_path, "sdmc:/")) { printf("\x1b[32mcurrently in sdmc:/\x1b[0m\n"); }
-
+  if (!strcmp(current_path, "sdmc:/")) {
+    consoleSelect(&debugscreen);
+    printf("\x1b[32mcurrently in sdmc:/\x1b[0m\n");
+  }
   // move up a directory
   else {
     get_ud();
@@ -129,17 +132,14 @@ void l_pressed(void) {
   }
 
   get_all_in_dir(current_path);
-  consoleSelect(&topScreen);
   clearscrn();
   print_all_values_in_filear();
 }
 
 void r_pressed(void) {
-  if (size_of_file_array == 0){ ; }
-
-  else {
+  if (size_of_file_array != 0) {
     clearscrn();
-    consoleSelect(&topScreen);
+    // Top screen already selected form clearscrn
     printf("\n\n\n\t\t\x1b[31mDelete %-35.35s\x1b[0m", file_arr[selected+scroll]);
     printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
@@ -151,10 +151,11 @@ void r_pressed(void) {
         get_all_in_dir(current_path);
         break;
       }
-      else if (exitkDown & KEY_B) { break; }
+      else if (exitkDown & KEY_B) {
+        break;
+      }
     }
 
-    consoleSelect(&topScreen);
     clearscrn();
     print_all_values_in_filear();
   }
