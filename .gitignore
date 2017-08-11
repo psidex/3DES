@@ -1,7 +1,6 @@
-# Build files
+# 3DS stuff
 build/
-*.smdh
-*.elf
+*.cia
 *.3dsx
 
 # Object files

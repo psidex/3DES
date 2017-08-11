@@ -34,3 +34,7 @@ Icon made by [Madebyoliver](http://www.flaticon.com/authors/madebyoliver) from [
 
 # Notes (mainly for myself)
 [Directory stuff](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html) | [Using escape codes](https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1) | [Explanation of `strtok()`](http://stackoverflow.com/a/3890186)
+
+# Build
+`make`
+`makerom -f cia -o 3DES.cia -rsf meta\cia.rsf -target t -exefslogo -elf 3DES.elf -icon 3DES.smdh -banner meta\banner.bin`
