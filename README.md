@@ -5,8 +5,6 @@ A (simple) homebrew 3ds File Browser written in C
  - Upper area of bottom screen - instructions
  - Lower area of bottom screen - debug output (look here if, for example, you try to create a directory and nothing happens)
 
-The folder `old 3DES` contains a version of 3DES with a broken copy/paste function that I may fix sometime
-
 Compiled with [devkitPro](https://devkitpro.org/)
 
 # Notes/Warnings
@@ -17,7 +15,7 @@ Compiled with [devkitPro](https://devkitpro.org/)
 
 - A - Change to selected directory (opening files not supported)
 - B - go "up" a directory
-- X - CD to `/` and reallocate memory
+- X - CD to `/`
 - L - Create a new directory (brings a keyboard up to type the name)
 - R - Delete file/directory
 - DPAD/Circle pad up and down control the selection of files/directories
@@ -27,7 +25,6 @@ Compiled with [devkitPro](https://devkitpro.org/)
 # TODO
 - Fix closing lid on delete screen causing 3ds to not wake up in certain situations
 - Show a message when file/dir successfully deleted
-- Find a way to copy/paste files > 2gb
 
 # Credits
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
