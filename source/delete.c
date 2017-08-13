@@ -18,21 +18,25 @@ void delete_dir_recursivley_(char path_to_delete[MAX_PATH_SIZE]) {
       if (dir->d_type == 8) {
         ret = remove(new_path_to_delete);
         if (ret) {
-          printf("\x1b[31mError: unable to delete file\x1b[0m\n");
+          printf("\x1b[41mError: unable to delete file %s\x1b[0m\n", dir->d_name);
+        }
+        else {
+          printf("\x1b[35mDeleted file: %s\x1b[0m\n", dir->d_name);
         }
       }
       else {
         delete_dir_recursivley_(new_path_to_delete);
       }
     }
+    closedir(d);
+    ret = rmdir(path_to_delete);
+    if (ret) {
+      printf("\x1b[41mError: unable to delete dir\x1b[0m\n");
+    }
   }
   else {
-    printf("\x1b[31mError: unable to open directory\x1b[0m\n");
-  }
-  closedir(d);
-  ret = rmdir(path_to_delete);
-  if (ret) {
-    printf("\x1b[31mError: unable to delete dir\x1b[0m\n");
+    // Dir doesen't exist?
+    closedir(d);
   }
 }
 
@@ -49,7 +53,7 @@ void delete_selected(void) {
   if (!isfile_arr[selected+scroll]) {
     ret = rmdir(filepath);
     if (!ret) {
-      printf("Directory deleted\n");
+      printf("\x1b[35m%s deleted\x1b[0m\n", file_arr[selected+scroll]);
     }
     else {
       delete_dir_recursivley_(filepath);
@@ -58,10 +62,10 @@ void delete_selected(void) {
   else {
     ret = remove(filepath);
     if (!ret) {
-      printf("File deleted\n");
+      printf("\x1b[35m%s deleted\x1b[0m\n", file_arr[selected+scroll]);
     }
     else {
-      printf("\x1b[31mError: unable to delete file\x1b[0m\n");
+      printf("\x1b[41mUnable to delete %s\x1b[0m\n", file_arr[selected+scroll]);
     }
   }
 }

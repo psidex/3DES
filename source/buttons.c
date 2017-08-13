@@ -3,9 +3,6 @@
 #include "draw.h"
 #include "delete.h"
 
-// TODO: Fix: Closing the lid while a new aptMainLoop
-// loop is active causes the 3ds to not "wake up"
-
 void up(void) {
   if (size_of_file_array != 0) {
     if (selected+scroll == 0) {
@@ -76,7 +73,6 @@ void a_pressed(void) {
       printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 
       get_all_in_dir(current_path);
-      clearscrn();
       print_all_values_in_filear();
     }
 
@@ -92,18 +88,17 @@ void b_pressed(void) {
     consoleSelect(&debugscreen);
     printf("\x1b[32mcurrently in sdmc:/\x1b[0m\n");
   }
-  // move up a directory
   else {
+    // move up a directory
     get_ud();
     get_all_in_dir(current_path);
-    clearscrn();
     print_all_values_in_filear();
   }
 }
 
 void l_pressed(void) {
   consoleSelect(&debugscreen);
-  printf("Bringing up keyboard...\n");
+  printf("\x1b[35mBringing up keyboard...\x1b[0m\n");
 
   SwkbdState swkbd;
   char newdirname[MAX_DIR_NAME_SIZE];
@@ -124,39 +119,24 @@ void l_pressed(void) {
   // will fail is path already exists
   result = mkdir(path_to_create, 0700);
 
-  if (result == 0) {
-    printf("Dir created\n");
+  if (!result) {
+    printf("\x1b[35mDir created\x1b[0m\n");
   }
   else {
-    printf("\x1b[31mError: Directory creation failed\x1b[0m\n");
+    printf("\x1b[41mError: Directory creation failed\x1b[0m\n");
   }
 
   get_all_in_dir(current_path);
-  clearscrn();
   print_all_values_in_filear();
 }
 
 void r_pressed(void) {
   if (size_of_file_array != 0) {
-    clearscrn();
-    // Top screen already selected form clearscrn
-    printf("\n\n\n\t\t\x1b[31mDelete %-35.35s\x1b[0m", file_arr[selected+scroll]);
-    printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
-
-    while (aptMainLoop()) {
-      hidScanInput();
-      u32 exitkDown = hidKeysDown();
-      if (exitkDown & KEY_A) {
-        delete_selected();
-        get_all_in_dir(current_path);
-        break;
-      }
-      else if (exitkDown & KEY_B) {
-        break;
-      }
+    int ret = delete_dialouge();
+    if (!ret) {
+      delete_selected();
+      get_all_in_dir(current_path);
     }
-
-    clearscrn();
     print_all_values_in_filear();
   }
 }

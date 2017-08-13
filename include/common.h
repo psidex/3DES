@@ -7,18 +7,6 @@
 #include <unistd.h> // rmdir()
 #include <3ds.h>    // Main 3ds lib (libctru)
 
-/*
-Notes:
-
-According to Wikipedia, the max FAT32 path length is 255 UTF-16 characters,
-so 255 * 2 = 510 (because the 16 in UTF-16 means 16 bits = 2 bytes)
-
-All malloc / realloc statements + arrays create the length needed +1,
-because there needs to be room for the end character
-
-Colours { red = error related, blue = button related, green = path related, white = other }
-*/
-
 extern char current_path[511]; // Contains current path
 extern int selected;           // Selected file index
 extern int scroll;             // Used to offset what is printed from the file array, to allow "scrolling"

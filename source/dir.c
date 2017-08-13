@@ -84,7 +84,7 @@ void get_all_in_dir(char dir_to_show[]) {
 
     if ((file_arr == NULL) || (isfile_arr == NULL) ) {
       // Malloc failed, deal with it
-      printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
+      printf("\x1b[41m!! MALLOC FAILED !!\x1b[0m\n");
       quit_for_err = true;
     }
 

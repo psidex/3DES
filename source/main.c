@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
   if ((file_arr == NULL) || (isfile_arr == NULL) ) {
     // Malloc failed, deal with it
     consoleSelect(&debugscreen);
-    printf("\x1b[31m!! MALLOC FAILED !!\x1b[0m\n");
+    printf("\x1b[41m!! MALLOC FAILED !!\x1b[0m\n");
     quit_for_err = true;
   }
 
@@ -104,7 +104,6 @@ int main(int argc, char **argv) {
       strcpy(current_path, "sdmc:/");
       printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
       get_all_in_dir(current_path);
-      clearscrn();
       print_all_values_in_filear();
     }
 

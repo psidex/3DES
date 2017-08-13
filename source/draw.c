@@ -2,6 +2,7 @@
 
 // Print all strings in the file name array and set highlighted line
 void print_all_values_in_filear(void) {
+  clearscrn();
   int max_files_to_print;
 
   if (size_of_file_array < MAX_FILES_ON_SCREEN) {
@@ -39,7 +40,6 @@ void print_all_values_in_filear(void) {
           printf("\n D | %-39.39s", file_arr[i+scroll]);
         }
       }
-
       else {
         if (i == selected) {
           printf("\n F | \x1b[47;30m%-39.39s\x1b[0m", file_arr[i+scroll]);
@@ -74,4 +74,27 @@ void clearscrn(void) {
   for (i=0; i<37; i++) { printf("%-40.40s", " "); }
   // Set cursor to top left (again)
   printf("\x1b[0;0H");
+}
+
+int delete_dialouge(void) {
+  clearscrn();
+  // Top screen already selected form clearscrn
+  printf("\n\n\n\t\t\x1b[31mDelete %-35.35s\x1b[0m", file_arr[selected+scroll]);
+  printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
+
+  while (aptMainLoop()) {
+    gspWaitForVBlank();
+    hidScanInput();
+    u32 exitkDown = hidKeysDown();
+    if (exitkDown & KEY_A) {
+      return 0;
+    }
+    else if (exitkDown & KEY_B) {
+      return 1;
+    }
+    gfxFlushBuffers();
+    gfxSwapBuffers();
+  }
+  // If something goes wrong (+ stops compile warning)
+  return 1;
 }

@@ -4,3 +4,4 @@
 
 void print_all_values_in_filear(void);
 void clearscrn(void);
+int delete_dialouge(void);
