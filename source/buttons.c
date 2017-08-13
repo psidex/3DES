@@ -73,7 +73,7 @@ void a_pressed(void) {
       printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
 
       get_all_in_dir(current_path);
-      print_all_values_in_filear();
+      print_all_values_in_filear(1);
     }
 
     else {
@@ -92,7 +92,7 @@ void b_pressed(void) {
     // move up a directory
     get_ud();
     get_all_in_dir(current_path);
-    print_all_values_in_filear();
+    print_all_values_in_filear(1);
   }
 }
 
@@ -127,7 +127,7 @@ void l_pressed(void) {
   }
 
   get_all_in_dir(current_path);
-  print_all_values_in_filear();
+  print_all_values_in_filear(1);
 }
 
 void r_pressed(void) {
@@ -137,6 +137,6 @@ void r_pressed(void) {
       delete_selected();
       get_all_in_dir(current_path);
     }
-    print_all_values_in_filear();
+    print_all_values_in_filear(1);
   }
 }

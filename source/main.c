@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
   get_all_in_dir(current_path);
 
   // Print all in root dir
-  print_all_values_in_filear();
+  print_all_values_in_filear(1);
 
   // Main loop
   while (aptMainLoop()) {
@@ -80,22 +80,22 @@ int main(int argc, char **argv) {
 
     else if (kDown & KEY_UP) {
       up();
-      print_all_values_in_filear();
+      print_all_values_in_filear(0);
     }
 
     else if (kDown & KEY_DOWN) {
       down();
-      print_all_values_in_filear();
+      print_all_values_in_filear(0);
     }
 
     else if (kDown & KEY_LEFT) {
       left();
-      print_all_values_in_filear();
+      print_all_values_in_filear(0);
     }
 
     else if (kDown & KEY_RIGHT) {
       right();
-      print_all_values_in_filear();
+      print_all_values_in_filear(0);
     }
 
     else if (kDown & KEY_X) {
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
       strcpy(current_path, "sdmc:/");
       printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
       get_all_in_dir(current_path);
-      print_all_values_in_filear();
+      print_all_values_in_filear(1);
     }
 
     else if (kDown & KEY_A) { a_pressed(); }

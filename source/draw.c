@@ -1,8 +1,11 @@
 #include "draw.h"
 
 // Print all strings in the file name array and set highlighted line
-void print_all_values_in_filear(void) {
-  clearscrn();
+void print_all_values_in_filear(int clr) {
+  if (clr) {
+    clearscrn();
+  }
+
   int max_files_to_print;
 
   if (size_of_file_array < MAX_FILES_ON_SCREEN) {

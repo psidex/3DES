@@ -17,7 +17,9 @@ A (simple) homebrew 3ds File Browser written in C
  - START to close app and go back to HB menu
 
 ### Warnings
+
 - Deleting directories uses a recursive function, so if you have a large (very large) amount of directories/files inside the directory you want to delete, it may end up breaking
+
 
 # Credits
 
@@ -26,7 +28,9 @@ Compiled with [devkitPro](https://devkitpro.org/)
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
 with the code :)
 
+
 # Notes (mainly for myself)
+
 [Directory stuff](https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html) | [Using escape codes](https://smealum.github.io/ctrulib/graphics_2printing_2colored-text_2source_2main_8c-example.html#a1) | [Explanation of `strtok()`](http://stackoverflow.com/a/3890186)
 
 - According to Wikipedia, the max FAT32 path length is 255 UTF-16 characters, so size of current_path = 255 * 2 = 510 (because the 16 in UTF-16 means 16 bits = 2 bytes)
@@ -38,8 +42,7 @@ with the code :)
   + magenta FG = message = `\x1b[35m  Success  \x1b[0m`
   + white FG   = other   = `Other`
 
-
 ### Build
+
 `make`
 `makerom -f cia -o 3DES.cia -rsf meta\cia.rsf -target t -exefslogo -elf 3DES.elf -icon 3DES.smdh -banner meta\banner.bin`
-`makerom -f cia -o 3DES.cia -rsf meta\cia.rsf -target t -exefslogo -elf 3DES.elf -icon meta\icon.png -banner meta\banner.bin`
