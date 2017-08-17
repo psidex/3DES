@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
   consoleSetWindow(&debugscreen, 0, 10, 40, 20);
 
   consoleSelect(&instructionscreen);
-  printf("A - Change Directory\nB - go up a directory\nX - CD to /\nY - Nothing\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
+  printf("A - Change Directory\nB - go up a directory\nX - CD to /\nY - Hash file\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
   printf("\n----------------------------------------");
 
   consoleSelect(&debugscreen);
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
   if ((file_arr == NULL) || (isfile_arr == NULL) ) {
     // Malloc failed, deal with it
     consoleSelect(&debugscreen);
-    printf("\x1b[41m!! MALLOC FAILED !!\x1b[0m\n");
+    printf("%s!! MALLOC FAILED !!%s\n", BG_RED, RESET);
     quit_for_err = true;
   }
 
@@ -101,9 +101,9 @@ int main(int argc, char **argv) {
 
     else if (kDown & KEY_X) {
       consoleSelect(&debugscreen);
-      printf("\x1b[34mKEY_X pressed\x1b[0m\n");
+      printf("%sKEY_X pressed%s\n", FG_BLUE, RESET);
       strcpy(current_path, "sdmc:/");
-      printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
+      printf("%snew path: %s%s\n", FG_GREEN, current_path, RESET);
       get_all_in_dir(current_path);
       print_all_values_in_filear(1);
     }

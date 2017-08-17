@@ -71,7 +71,7 @@ void a_pressed(void) {
       strcat(current_path, "/");
 
       consoleSelect(&debugscreen);
-      printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
+      printf("%snew path: %s%s\n", FG_GREEN, current_path, RESET);
 
       get_all_in_dir(current_path);
       print_all_values_in_filear(1);
@@ -87,7 +87,7 @@ void a_pressed(void) {
 void b_pressed(void) {
   if (!strcmp(current_path, "sdmc:/")) {
     consoleSelect(&debugscreen);
-    printf("\x1b[32mcurrently in sdmc:/\x1b[0m\n");
+    printf("%scurrently in sdmc:/%s\n", FG_GREEN, RESET);
   }
   else {
     // move up a directory
@@ -99,7 +99,7 @@ void b_pressed(void) {
 
 void l_pressed(void) {
   consoleSelect(&debugscreen);
-  printf("\x1b[35mBringing up keyboard...\x1b[0m\n");
+  printf("%sBringing up keyboard...%s\n", FG_MAGENTA, RESET);
 
   SwkbdState swkbd;
   char newdirname[MAX_DIR_NAME_SIZE];
@@ -113,7 +113,7 @@ void l_pressed(void) {
   strncpy(path_to_create, current_path, MAX_PATH_SIZE);
   strcat(path_to_create, newdirname);
 
-  printf("\x1b[32mpath to create: %s\x1b[0m\n", path_to_create);
+  printf("%spath to create: %s%s\n", FG_GREEN, path_to_create, RESET);
 
   int result;
 
@@ -121,10 +121,10 @@ void l_pressed(void) {
   result = mkdir(path_to_create, 0700);
 
   if (!result) {
-    printf("\x1b[35mDir created\x1b[0m\n");
+    printf("%sDir created%s\n", FG_MAGENTA, RESET);
   }
   else {
-    printf("\x1b[41mError: Directory creation failed\x1b[0m\n");
+    printf("%sError: Directory creation failed%s\n", BG_RED, RESET);
   }
 
   get_all_in_dir(current_path);

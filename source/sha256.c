@@ -7,7 +7,6 @@
 #include "common.h"
 #include "sha256.h"
 #include "draw.h"
-#include "colours.h"
 #include <memory.h>
 
 /****************************** MACROS ******************************/
@@ -156,8 +155,13 @@ void sha256_final(SHA256_CTX *ctx, BYTE hash[])
 *********************************************************************/
 
 void sha256_current_file(void) {
-  clearscrn();
+  if (!isfile_arr[selected+scroll]) {
+    consoleSelect(&debugscreen);
+    printf("%sCannot hash directory%s\n", FG_CYAN, RESET);
+    return;
+  }
 
+  clearscrn();
   char file_path[MAX_PATH_SIZE];
   strcpy(file_path, current_path);
   strcat(file_path, file_arr[selected+scroll]);
@@ -169,6 +173,9 @@ void sha256_current_file(void) {
   }
 
   else {
+    consoleSelect(&debugscreen);
+    printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll], RESET);
+    consoleSelect(&topScreen);
     SHA256_CTX ctx;
     sha256_init(&ctx);
 

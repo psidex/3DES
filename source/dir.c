@@ -38,7 +38,7 @@ void get_ud(void) {
     // get the next token
     token = strtok(NULL, looking_for);
   }
-  printf("\x1b[32mnew path: %s\x1b[0m\n", current_path);
+  printf("%snew path: %s%s\n", FG_GREEN, current_path, RESET);
 }
 
 // Fills file array with all files in a given directory

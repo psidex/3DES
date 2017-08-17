@@ -7,6 +7,7 @@
 #include <3ds.h>    // Main 3ds lib (libctru)
 #include <dirent.h> // For opendir() and readdir()
 #include <unistd.h> // rmdir()
+#include "colours.h" // Console colours
 
 extern char current_path[511]; // Contains current path
 extern int selected;           // Selected file index

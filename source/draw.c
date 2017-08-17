@@ -1,6 +1,5 @@
 #include "common.h"
 #include "draw.h"
-#include "colours.h"
 
 // Print all strings in the file name array and set highlighted line
 void print_all_values_in_filear(int clr) {
@@ -19,7 +18,7 @@ void print_all_values_in_filear(int clr) {
 
   consoleSelect(&topScreen);
   // Moves the cursor to the top left corner of the screen
-  printf("\x1b[0;0H");
+  printf(RESET_TO_TOP_LEFT);
 
   if (max_files_to_print > 0) {
     if (scroll > 0) {
@@ -84,7 +83,7 @@ void clearscrn(void) {
 int delete_dialouge(void) {
   clearscrn();
   // Top screen already selected form clearscrn
-  printf("\n\n\n\t\t\x1b[31mDelete %-35.35s\x1b[0m", file_arr[selected+scroll]);
+  printf("\n\n\n\t\t%sDelete %-35.35s%s", FG_RED, file_arr[selected+scroll], RESET);
   printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
   while (aptMainLoop()) {
