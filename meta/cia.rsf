@@ -3,10 +3,10 @@ BasicInfo:
   CompanyCode             : "00"
   ProductCode             : "CTR-P-3DES"
   ContentType             : Application
-  Logo                    : Nintendo # Nintendo / Licensed / Distributed / iQue / iQueForSystem
+  Logo                    : Homebrew # Nintendo / Licensed / Distributed / iQue / iQueForSystem
 
 TitleInfo:
-  UniqueId                : 0xF100
+  UniqueId                : 0xF100D
   Category                : Application
 
 Option:
@@ -21,7 +21,7 @@ AccessControlInfo:
 
 SystemControlInfo:
   SaveDataSize: 0KB
-  RemasterVersion: 0
+  RemasterVersion: 2
   StackSize: 0x40000
 
 # DO NOT EDIT BELOW HERE OR PROGRAMS WILL NOT LAUNCH (most likely)

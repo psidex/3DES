@@ -25,6 +25,8 @@ A (simple) homebrew 3ds File Browser written in C
 
 Compiled with [devkitPro](https://devkitpro.org/)
 
+`sha256.c` & `sha256.h` created by [Brad Conte](https://github.com/B-Con/crypto-algorithms), edited by me
+
 Thanks to [Pirater12](https://github.com/Pirater12) and [LiquidFenrir](https://github.com/LiquidFenrir) for helping me
 with the code :)
 

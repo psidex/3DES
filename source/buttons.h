@@ -1,6 +1,5 @@
-#pragma once
-
-#include "common.h"
+#ifndef BUTTONS_H
+#define BUTTONS_H
 
 void up(void);
 void down(void);
@@ -12,3 +11,5 @@ void b_pressed(void);
 // KEY_X handled in main.c
 void l_pressed(void);
 void r_pressed(void);
+
+#endif

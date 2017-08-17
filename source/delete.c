@@ -1,3 +1,4 @@
+#include "common.h"
 #include "delete.h"
 
 void delete_dir_recursivley_(char path_to_delete[MAX_PATH_SIZE]) {

@@ -1,11 +1,12 @@
-#pragma once
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <stdio.h>  // Basic functions
 #include <stdlib.h> // malloc and free
 #include <string.h> // String manipulation
+#include <3ds.h>    // Main 3ds lib (libctru)
 #include <dirent.h> // For opendir() and readdir()
 #include <unistd.h> // rmdir()
-#include <3ds.h>    // Main 3ds lib (libctru)
 
 extern char current_path[511]; // Contains current path
 extern int selected;           // Selected file index
@@ -24,3 +25,5 @@ extern int MAX_FILES_ON_SCREEN; // What it says on the tin
 extern int MAX_PATH_SIZE;       // Max size of PATH
 
 extern bool quit_for_err;   // Closes the main loop if an error happens
+
+#endif

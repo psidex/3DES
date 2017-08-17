@@ -1,4 +1,6 @@
+#include "common.h"
 #include "draw.h"
+#include "colours.h"
 
 // Print all strings in the file name array and set highlighted line
 void print_all_values_in_filear(int clr) {
@@ -36,7 +38,7 @@ void print_all_values_in_filear(int clr) {
       if (!isfile_arr[i+scroll]) {
         // print as white text on black background (%-39.39s instead of %s to control min and max width)
         if (i == selected) {
-          printf("\n D | \x1b[47;30m%-39.39s\x1b[0m", file_arr[i+scroll]);
+          printf("\n D | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll], RESET);
         }
         // Else, just print it without highlight
         else {
@@ -45,7 +47,7 @@ void print_all_values_in_filear(int clr) {
       }
       else {
         if (i == selected) {
-          printf("\n F | \x1b[47;30m%-39.39s\x1b[0m", file_arr[i+scroll]);
+          printf("\n F | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll], RESET);
         }
         else {
           printf("\n F | %-39.39s", file_arr[i+scroll]);
@@ -63,7 +65,7 @@ void print_all_values_in_filear(int clr) {
     }
   }
   else {
-    printf("\n\n\t\t\x1b[47;30m- Folder is empty -\x1b[0m");
+    printf("\n\n\t\t%s- Folder is empty -%s", BLACK_ON_WHITE, RESET);
   }
 }
 
@@ -72,11 +74,11 @@ void clearscrn(void) {
   int i;
   consoleSelect(&topScreen);
   // Set cursor to top left
-  printf("\x1b[0;0H");
+  printf(RESET_TO_TOP_LEFT);
   // Fill the screen with blank spaces
   for (i=0; i<37; i++) { printf("%-40.40s", " "); }
   // Set cursor to top left (again)
-  printf("\x1b[0;0H");
+  printf(RESET_TO_TOP_LEFT);
 }
 
 int delete_dialouge(void) {

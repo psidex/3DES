@@ -1,3 +1,4 @@
+#include "common.h"
 #include "sort.h"
 
 // Sort filename array (yay for bubble sort)

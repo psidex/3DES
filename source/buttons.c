@@ -1,3 +1,4 @@
+#include "common.h"
 #include "buttons.h"
 #include "dir.h"
 #include "draw.h"

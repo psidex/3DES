@@ -1,3 +1,4 @@
+#include "common.h"
 #include "dir.h"
 #include "sort.h"
 
@@ -84,7 +85,7 @@ void get_all_in_dir(char dir_to_show[]) {
 
     if ((file_arr == NULL) || (isfile_arr == NULL) ) {
       // Malloc failed, deal with it
-      printf("\x1b[41m!! MALLOC FAILED !!\x1b[0m\n");
+      printf("%s!! MALLOC FAILED !!%s\n", BG_RED, RESET);
       quit_for_err = true;
     }
 
