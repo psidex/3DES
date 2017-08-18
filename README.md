@@ -40,12 +40,6 @@ with the code :)
 
 ### ToDo
 
- - Use [libctru FS](http://smealum.github.io/ctrulib/fs_8h.html) instead of dirent.h to
-   + Open / close directoires 
-   + Read from directories
-   + Get file info
-   + SHA256 data
-   + & more
  - Finish context menu
    + Copy, Cut & Paste
    + Show file size
