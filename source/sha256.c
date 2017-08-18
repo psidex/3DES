@@ -165,41 +165,54 @@ void sha256_current_file(void) {
   char file_path[MAX_PATH_SIZE];
   strcpy(file_path, current_path);
   strcat(file_path, file_arr[selected+scroll].name);
-  printf("%s%s%s\n\n", BLACK_ON_WHITE, file_path, RESET);
+  printf("%s%s%s\n\n", BLACK_ON_WHITE, file_arr[selected+scroll].name, RESET);
 
   FILE *inFile = fopen(file_path, "rb");
   if (inFile == NULL) {
-     printf ("%s can't be opened", file_path);
-  }
-
-  else {
     consoleSelect(&debugscreen);
-    printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll].name, RESET);
-    consoleSelect(&topScreen);
-    SHA256_CTX ctx;
-    sha256_init(&ctx);
-
-    int bytes;
-    unsigned char data[1024];
-    while ((bytes = fread(data, 1, 1024, inFile)) != 0)
-       sha256_update(&ctx, data, bytes);
-
-    unsigned char hash_arr[SHA256_BLOCK_SIZE];
-    sha256_final(&ctx, hash_arr);
-
-    printf("SHA256:\n\n");
-    for(int i=0; i<SHA256_BLOCK_SIZE; i++) {
-      printf("%02x", hash_arr[i]);
-    }
-    fclose (inFile);
+    printf ("%s can't be opened", file_path);
+    return;
   }
 
-  printf("\n\nPress B to go back\n");
+  consoleSelect(&debugscreen);
+  printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll].name, RESET);
+  consoleSelect(&topScreen);
+  SHA256_CTX ctx;
+  sha256_init(&ctx);
+
+  int bytes;
+  unsigned char data[1024];
+  while ((bytes = fread(data, 1, 1024, inFile)) != 0)
+     sha256_update(&ctx, data, bytes);
+
+  unsigned char hash_arr[SHA256_BLOCK_SIZE];
+  sha256_final(&ctx, hash_arr);
+
+  printf("SHA256:\n");
+  for(int i=0; i<SHA256_BLOCK_SIZE; i++) {
+    if (i % 16 == 0) {
+      printf("\n");
+    }
+    printf("%02x", hash_arr[i]);
+  }
+  fclose(inFile);
+
+  printf("\n\nPress A to write to .SHA file\n");
+  printf("Press B to go back\n");
   while (aptMainLoop()) {
     gspWaitForVBlank();
     hidScanInput();
     u32 exitkDown = hidKeysDown();
     if (exitkDown & KEY_B) {
+      break;
+    }
+    else if (exitkDown & KEY_A) {
+      // ToDo: IF NEW PATH WILL BE GREATER THAN MAX_DIR_NAME_SIZE THEN DEAL WITH IT
+      strcat(file_path, ".SHA");
+      FILE *fp;
+      fp = fopen(file_path , "w");
+      fwrite(hash_arr, 1, sizeof(hash_arr), fp);
+      fclose(fp);
       break;
     }
     gfxFlushBuffers();

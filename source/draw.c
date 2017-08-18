@@ -20,6 +20,12 @@ void print_all_values_in_filear(int clr) {
   // Moves the cursor to the top left corner of the screen
   printf(RESET_TO_TOP_LEFT);
 
+  if (strlen(current_path) <= 50) {
+    printf("%s%s%s\n", BLACK_ON_WHITE, current_path, RESET);
+  } else {
+    printf("%s%s%s", BLACK_ON_WHITE, current_path+strlen(current_path)-50, RESET);
+  }
+
   if (max_files_to_print > 0) {
     if (scroll > 0) {
       // Print up arrow showing you can scroll up

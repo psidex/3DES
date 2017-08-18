@@ -10,7 +10,7 @@
 #include "colours.h" // Console colours
 
 #define MAX_DIR_NAME_SIZE 261
-#define MAX_FILES_ON_SCREEN 26
+#define MAX_FILES_ON_SCREEN 25 // 26
 #define MAX_PATH_SIZE 511
 
 // Struct to hold clipboard things in

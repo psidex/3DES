@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   consoleInit(GFX_BOTTOM, &debugscreen);
   consoleInit(GFX_BOTTOM, &instructionscreen);
 
-  // Set position of these 2 windows
+  // Set position of these 2 windows (x, y, width, height)
   consoleSetWindow(&instructionscreen, 0, 0, 40, 9);
   consoleSetWindow(&debugscreen, 0, 10, 40, 20);
 
