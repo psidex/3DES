@@ -7,8 +7,8 @@ A (simple) homebrew 3ds File Browser written in C
 
 ### Buttons:
 
- - A - Change to selected directory (opening files not supported)
- - B - go "up" a directory
+ - A - Change to selected directory / Open file context menu
+ - B - go "up" a directory / go back
  - X - CD to `/`
  - L - Create a new directory (brings a keyboard up to type the name)
  - R - Delete file/directory
@@ -18,7 +18,7 @@ A (simple) homebrew 3ds File Browser written in C
 
 ### Warnings
 
-- Deleting directories uses a recursive function, so if you have a large (very large) amount of directories/files inside the directory you want to delete, it may end up breaking
+- Deleting directories uses a recursive function, so if you have a large (very large) amount of subdirectories inside the directory you want to delete, it may end up breaking
 
 
 # Credits
@@ -37,14 +37,21 @@ with the code :)
 
 - According to Wikipedia, the max FAT32 path length is 255 UTF-16 characters, so size of current_path = 255 * 2 = 510 (because the 16 in UTF-16 means 16 bits = 2 bytes)
 - All malloc / realloc statements + arrays create the length needed +1, because there needs to be room for the end character
-- Colours:
-  + red BG     = error   = `\x1b[41m  Error    \x1b[0m`
-  + green FG   = path    = `\x1b[32m  Path     \x1b[0m`
-  + blue FG    = input   = `\x1b[34m  Input    \x1b[0m`
-  + magenta FG = message = `\x1b[35m  Success  \x1b[0m`
-  + white FG   = other   = `Other`
+
+### ToDo
+
+ - Finish context menu
+  + Copy, Cut & Paste
+  + Show file size
+  + stat() info
+- Add create dummy file option
+- Add ability to view file hex / text
+- Custom font / font-size (if possible?)
+- Add ability to rename file / directory
+- Add ability to mark files for multiple deletion and/or copying
+- Look into accessing areas other than `sdmc:/`
 
 ### Build
 
-`make`
-`makerom -f cia -o 3DES.cia -rsf meta\cia.rsf -target t -exefslogo -elf 3DES.elf -icon 3DES.smdh -banner meta\banner.bin`
+ - `make`
+ - `makerom -f cia -o 3DES.cia -rsf meta\cia.rsf -target t -exefslogo -elf 3DES.elf -icon 3DES.smdh -banner meta\banner.bin`
