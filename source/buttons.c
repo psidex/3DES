@@ -82,7 +82,8 @@ void a_pressed(void) {
       consoleSelect(&debugscreen);
       printf("%sOpening file context menu%s\n", FG_MAGENTA, RESET);
       open_context_menu();
-      print_all_values_in_filear(0);
+      get_all_in_dir(current_path);
+      print_all_values_in_filear(1);
     }
   }
 }

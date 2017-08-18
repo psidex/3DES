@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
   consoleSetWindow(&debugscreen, 0, 10, 40, 20);
 
   consoleSelect(&instructionscreen);
-  printf("A - Change Directory\nB - go up a directory\nX - CD to /\nY - Hash file\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
+  printf("A - cd / open context menu\nB - go up a directory\nX - CD to /\nY - Nothing\nL - Create a new dir\nR - Delete dir/file\nDPAD/Circle pad - up and down\nSTART - close app");
   printf("\n----------------------------------------");
 
   consoleSelect(&debugscreen);

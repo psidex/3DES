@@ -166,15 +166,14 @@ void sha256_current_file(void) {
   strcpy(file_path, current_path);
   strcat(file_path, file_arr[selected+scroll].name);
   printf("%s%s%s\n\n", BLACK_ON_WHITE, file_arr[selected+scroll].name, RESET);
+  consoleSelect(&debugscreen);
 
-  FILE *inFile = fopen(file_path, "rb");
-  if (inFile == NULL) {
-    consoleSelect(&debugscreen);
+  FILE *in_file = fopen(file_path, "rb");
+  if (in_file == NULL) {
     printf ("%s can't be opened", file_path);
     return;
   }
 
-  consoleSelect(&debugscreen);
   printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll].name, RESET);
   consoleSelect(&topScreen);
   SHA256_CTX ctx;
@@ -182,8 +181,9 @@ void sha256_current_file(void) {
 
   int bytes;
   unsigned char data[1024];
-  while ((bytes = fread(data, 1, 1024, inFile)) != 0)
-     sha256_update(&ctx, data, bytes);
+  while ((bytes = fread(data, 1, 1024, in_file)) != 0) {
+    sha256_update(&ctx, data, bytes);
+  }
 
   unsigned char hash_arr[SHA256_BLOCK_SIZE];
   sha256_final(&ctx, hash_arr);
@@ -195,7 +195,7 @@ void sha256_current_file(void) {
     }
     printf("%02x", hash_arr[i]);
   }
-  fclose(inFile);
+  fclose(in_file);
 
   printf("\n\nPress A to write to .SHA file\n");
   printf("Press B to go back\n");
@@ -207,12 +207,18 @@ void sha256_current_file(void) {
       break;
     }
     else if (exitkDown & KEY_A) {
-      // ToDo: IF NEW PATH WILL BE GREATER THAN MAX_DIR_NAME_SIZE THEN DEAL WITH IT
       strcat(file_path, ".SHA");
-      FILE *fp;
-      fp = fopen(file_path , "w");
-      fwrite(hash_arr, 1, sizeof(hash_arr), fp);
-      fclose(fp);
+      FILE *hashfile = fopen(file_path , "w");
+
+      consoleSelect(&debugscreen);
+      if (hashfile == NULL) {
+        printf("%s.SHA write failed%s\n", BG_RED, RESET);
+      }
+      else {
+        fwrite(hash_arr, 1, sizeof(hash_arr), hashfile);
+        fclose(hashfile);
+        printf("%sHash written to file%s\n", FG_CYAN, RESET);
+      }
       break;
     }
     gfxFlushBuffers();
