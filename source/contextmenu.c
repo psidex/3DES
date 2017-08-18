@@ -3,9 +3,18 @@
 #include "sha256.h"
 #include "draw.h"
 
-const char *ctm_items[4];
-int ctm_items_len = 4;
+#define ctm_items_len 4
+#define ctm_item_str_len 20
+
+char ctm_items[ctm_items_len][ctm_item_str_len];
 int ctm_selected;
+
+void setup_ctm(void) {
+  strncpy(ctm_items[0], "Get SHA256 Hash", ctm_item_str_len);
+  strncpy(ctm_items[1], "Cut", ctm_item_str_len);
+  strncpy(ctm_items[2], "Copy", ctm_item_str_len);
+  strncpy(ctm_items[3], "Paste", ctm_item_str_len);
+}
 
 void draw_context_menu(void) {
   consoleSelect(&topScreen);
@@ -24,10 +33,6 @@ void draw_context_menu(void) {
 
 void open_context_menu(void) {
   ctm_selected = 0;
-  ctm_items[0] = "Get SHA256 Hash";
-  ctm_items[1] = "Cut";
-  ctm_items[2] = "Copy";
-  ctm_items[3] = "Paste";
 
   clearscrn();
   draw_context_menu();
@@ -57,10 +62,12 @@ void open_context_menu(void) {
     }
 
     else if (ctm_kDown & KEY_A) {
-      if (ctm_selected == 0) {
-        sha256_current_file();
-        clearscrn();
-        draw_context_menu();
+      switch (ctm_selected) {
+        case 0:
+          sha256_current_file();
+          clearscrn();
+          draw_context_menu();
+          break;
       }
     }
 

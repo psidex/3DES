@@ -2,6 +2,7 @@
 #include "dir.h"
 #include "draw.h"
 #include "buttons.h"
+#include "contextmenu.h"
 
 char current_path[511];
 int selected = 0;
@@ -12,10 +13,6 @@ bool *isfile_arr;
 int size_of_file_array;
 
 PrintConsole topScreen, instructionscreen, debugscreen;
-
-int MAX_DIR_NAME_SIZE   = 261;
-int MAX_FILES_ON_SCREEN = 26;
-int MAX_PATH_SIZE       = 511;
 
 bool quit_for_err = false;
 
@@ -54,6 +51,9 @@ int main(int argc, char **argv) {
   size_of_file_array = 1;
 
   strcpy(current_path, "sdmc:/");
+
+  // Init context menu
+  setup_ctm();
 
   // Fill file name array with file names
   get_all_in_dir(current_path);

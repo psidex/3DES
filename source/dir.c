@@ -75,7 +75,7 @@ void get_all_in_dir(char dir_to_show[]) {
     // Create a 2D array of char pointers the size of the amount of files in the chosen directory
     file_arr = realloc(file_arr, (size_of_file_array+1) * sizeof(char*));
 
-    // Set each pointer inside the array to point to a "string"
+    // Set each pointer inside the array to point to a string
     for (int i = 0; i < size_of_file_array; i++) {
       file_arr[i] = malloc(MAX_DIR_NAME_SIZE * sizeof(char));
     }
