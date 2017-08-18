@@ -200,7 +200,6 @@ void sha256_current_file(void) {
     hidScanInput();
     u32 exitkDown = hidKeysDown();
     if (exitkDown & KEY_B) {
-      print_all_values_in_filear(1);
       break;
     }
     gfxFlushBuffers();

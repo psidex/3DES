@@ -2,7 +2,6 @@
 #include "dir.h"
 #include "draw.h"
 #include "buttons.h"
-#include "sha256.h"
 
 char current_path[511];
 int selected = 0;
@@ -112,7 +111,6 @@ int main(int argc, char **argv) {
     else if (kDown & KEY_B) { b_pressed(); }
     else if (kDown & KEY_L) { l_pressed(); }
     else if (kDown & KEY_R) { r_pressed(); }
-    else if (kDown & KEY_Y) { sha256_current_file(); }
 
     // Flush and swap framebuffers
     gfxFlushBuffers();

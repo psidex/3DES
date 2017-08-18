@@ -3,6 +3,7 @@
 #include "dir.h"
 #include "draw.h"
 #include "delete.h"
+#include "contextmenu.h"
 
 void up(void) {
   if (size_of_file_array != 0) {
@@ -79,7 +80,9 @@ void a_pressed(void) {
 
     else {
       consoleSelect(&debugscreen);
-      printf("path is file\n");
+      printf("%sOpening file context menu%s\n", FG_MAGENTA, RESET);
+      open_context_menu();
+      print_all_values_in_filear(0);
     }
   }
 }
