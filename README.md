@@ -41,9 +41,9 @@ with the code :)
 ### ToDo
 
  - Finish context menu
-  + Copy, Cut & Paste
-  + Show file size
-  + stat() info
+   + Copy, Cut & Paste
+   + Show file size
+   + stat() info
 - Add create dummy file option
 - Add ability to view file hex / text
 - Custom font / font-size (if possible?)
