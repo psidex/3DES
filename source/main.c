@@ -8,8 +8,7 @@ char current_path[511];
 int selected = 0;
 int scroll   = 0;
 
-char **file_arr;
-bool *isfile_arr;
+file_entry *file_arr;
 int size_of_file_array;
 
 PrintConsole topScreen, instructionscreen, debugscreen;
@@ -36,11 +35,10 @@ int main(int argc, char **argv) {
   consoleSelect(&debugscreen);
   printf("Started...\n");
 
-  // Initial allocation for these 2 arrays
-  file_arr = malloc(1 * sizeof(char*));
-  isfile_arr = malloc(1 * sizeof(bool));
+  // Initial allocation
+  file_arr = malloc(1 * sizeof(file_entry));
 
-  if ((file_arr == NULL) || (isfile_arr == NULL) ) {
+  if (file_arr == NULL) {
     // Malloc failed, deal with it
     consoleSelect(&debugscreen);
     printf("%s!! MALLOC FAILED !!%s\n", BG_RED, RESET);
@@ -117,10 +115,7 @@ int main(int argc, char **argv) {
     gfxSwapBuffers();
   }
 
-  // Clear up allocated memory
-  for (int i=0; i<size_of_file_array; i++) { free(file_arr[i]); }
   free(file_arr);
-  free(isfile_arr);
   gfxExit();
   return 0;
 }

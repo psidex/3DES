@@ -19,7 +19,7 @@ void setup_ctm(void) {
 void draw_context_menu(void) {
   consoleSelect(&topScreen);
   printf(RESET_TO_TOP_LEFT);
-  printf("%s%s%s\n\n", BLACK_ON_WHITE, file_arr[selected+scroll], RESET);
+  printf("%s%s%s\n\n", BLACK_ON_WHITE, file_arr[selected+scroll].name, RESET);
   for (int i=0; i<ctm_items_len; i++) {
     if (i == ctm_selected) {
       printf("\t-> %s\n", ctm_items[i]);

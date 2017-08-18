@@ -155,7 +155,7 @@ void sha256_final(SHA256_CTX *ctx, BYTE hash[])
 *********************************************************************/
 
 void sha256_current_file(void) {
-  if (!isfile_arr[selected+scroll]) {
+  if (!file_arr[selected+scroll].isfile) {
     consoleSelect(&debugscreen);
     printf("%sCannot hash directory%s\n", FG_CYAN, RESET);
     return;
@@ -164,7 +164,7 @@ void sha256_current_file(void) {
   clearscrn();
   char file_path[MAX_PATH_SIZE];
   strcpy(file_path, current_path);
-  strcat(file_path, file_arr[selected+scroll]);
+  strcat(file_path, file_arr[selected+scroll].name);
   printf("%s%s%s\n\n", BLACK_ON_WHITE, file_path, RESET);
 
   FILE *inFile = fopen(file_path, "rb");
@@ -174,7 +174,7 @@ void sha256_current_file(void) {
 
   else {
     consoleSelect(&debugscreen);
-    printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll], RESET);
+    printf("%sHashing %s%s\n", FG_CYAN, file_arr[selected+scroll].name, RESET);
     consoleSelect(&topScreen);
     SHA256_CTX ctx;
     sha256_init(&ctx);

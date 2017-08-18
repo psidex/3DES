@@ -67,8 +67,8 @@ void right(void) {
 void a_pressed(void) {
   if (size_of_file_array != 0) {
     // If it is actually a directory
-    if (!isfile_arr[selected+scroll]) {
-      strcat(current_path, file_arr[selected+scroll]);
+    if (!file_arr[selected+scroll].isfile) {
+      strcat(current_path, file_arr[selected+scroll].name);
       strcat(current_path, "/");
 
       consoleSelect(&debugscreen);

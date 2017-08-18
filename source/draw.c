@@ -34,22 +34,22 @@ void print_all_values_in_filear(int clr) {
 
     for (i=0; i<max_files_to_print; i++) {
       // If it is a dir
-      if (!isfile_arr[i+scroll]) {
+      if (!file_arr[i].isfile) {
         // print as white text on black background (%-39.39s instead of %s to control min and max width)
         if (i == selected) {
-          printf("\n D | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll], RESET);
+          printf("\n D | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll].name, RESET);
         }
         // Else, just print it without highlight
         else {
-          printf("\n D | %-39.39s", file_arr[i+scroll]);
+          printf("\n D | %-39.39s", file_arr[i+scroll].name);
         }
       }
       else {
         if (i == selected) {
-          printf("\n F | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll], RESET);
+          printf("\n F | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll].name, RESET);
         }
         else {
-          printf("\n F | %-39.39s", file_arr[i+scroll]);
+          printf("\n F | %-39.39s", file_arr[i+scroll].name);
         }
       }
     }
@@ -83,7 +83,7 @@ void clearscrn(void) {
 int delete_dialouge(void) {
   clearscrn();
   // Top screen already selected form clearscrn
-  printf("\n\n\n\t\t%sDelete %-35.35s%s", FG_RED, file_arr[selected+scroll], RESET);
+  printf("\n\n\n\t\t%sDelete %-35.35s%s", FG_RED, file_arr[selected+scroll].name, RESET);
   printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
   while (aptMainLoop()) {
