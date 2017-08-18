@@ -6,16 +6,12 @@ void print_all_values_in_filear(int clr) {
   if (clr) {
     clearscrn();
   }
-
   int max_files_to_print;
-
   if (size_of_file_array < MAX_FILES_ON_SCREEN) {
     max_files_to_print = size_of_file_array;
-  }
-  else {
+  } else {
     max_files_to_print = MAX_FILES_ON_SCREEN;
   }
-
   consoleSelect(&topScreen);
   // Moves the cursor to the top left corner of the screen
   printf(RESET_TO_TOP_LEFT);
@@ -28,48 +24,33 @@ void print_all_values_in_filear(int clr) {
 
   if (max_files_to_print > 0) {
     if (scroll > 0) {
-      // Print up arrow showing you can scroll up
       printf("/\\\n");
-    }
-    else {
+    } else {
       // Keep all the files in the same place on screen, erase an arrow if there was one
       printf("  \n");
     }
-
-    int i;
-
-    for (i=0; i<max_files_to_print; i++) {
-      // If it is a dir
+    for (int i=0; i<max_files_to_print; i++) {
       if (!file_arr[i].isfile) {
-        // print as white text on black background (%-39.39s instead of %s to control min and max width)
         if (i == selected) {
           printf("\n D | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll].name, RESET);
-        }
-        // Else, just print it without highlight
-        else {
+        } else {
           printf("\n D | %-39.39s", file_arr[i+scroll].name);
         }
-      }
-      else {
+      } else {
         if (i == selected) {
           printf("\n F | %s%-39.39s%s", BLACK_ON_WHITE, file_arr[i+scroll].name, RESET);
-        }
-        else {
+        } else {
           printf("\n F | %-39.39s", file_arr[i+scroll].name);
         }
       }
     }
 
     if ( (size_of_file_array > MAX_FILES_ON_SCREEN) && (selected+scroll != size_of_file_array-1) ) {
-      // If there are files below on screen
       printf("\n\n\\/");
-    }
-    else {
-      // Erase arrow if there was one
+    } else {
       printf("\n\n  ");
     }
-  }
-  else {
+  } else {
     printf("\n\n\t\t%s- Folder is empty -%s", BLACK_ON_WHITE, RESET);
   }
 }
@@ -78,11 +59,9 @@ void print_all_values_in_filear(int clr) {
 void clearscrn(void) {
   int i;
   consoleSelect(&topScreen);
-  // Set cursor to top left
   printf(RESET_TO_TOP_LEFT);
   // Fill the screen with blank spaces
   for (i=0; i<37; i++) { printf("%-40.40s", " "); }
-  // Set cursor to top left (again)
   printf(RESET_TO_TOP_LEFT);
 }
 

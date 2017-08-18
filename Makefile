@@ -34,6 +34,11 @@ DATA		:=	data
 INCLUDES	:=	include
 #ROMFS		:=	romfs
 
+APP_TITLE := 3DES
+APP_DESCRIPTION := 3DS Explorer Shell
+APP_AUTHOR := thatguywiththatname
+ICON := meta/icon.png
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
