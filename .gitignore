@@ -2,6 +2,7 @@
 build/
 *.cia
 *.3dsx
+*.smdh
 
 # Object files
 *.o
