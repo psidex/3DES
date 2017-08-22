@@ -2,9 +2,9 @@
 #include "draw.h"
 
 // Print all strings in the file name array and set highlighted line
-void print_all_values_in_filear(int clr) {
+void draw_filearr(int clr) {
   if (clr) {
-    clearscrn();
+    draw_clearscrn();
   }
   int max_files_to_print;
   if (size_of_file_array < MAX_FILES_ON_SCREEN) {
@@ -12,7 +12,7 @@ void print_all_values_in_filear(int clr) {
   } else {
     max_files_to_print = MAX_FILES_ON_SCREEN;
   }
-  consoleSelect(&topScreen);
+  consoleSelect(&top_screen);
   // Moves the cursor to the top left corner of the screen
   printf(RESET_TO_TOP_LEFT);
 
@@ -56,18 +56,17 @@ void print_all_values_in_filear(int clr) {
 }
 
 // Clear the screen
-void clearscrn(void) {
-  int i;
-  consoleSelect(&topScreen);
+void draw_clearscrn(void) {
+  consoleSelect(&top_screen);
   printf(RESET_TO_TOP_LEFT);
   // Fill the screen with blank spaces
-  for (i=0; i<37; i++) { printf("%-40.40s", " "); }
+  for (int i=0; i<37; i++) { printf("%-40.40s", " "); }
   printf(RESET_TO_TOP_LEFT);
 }
 
-int delete_dialouge(void) {
-  clearscrn();
-  // Top screen already selected form clearscrn
+int draw_delete_dialouge(void) {
+  draw_clearscrn();
+  // Top screen already selected form draw_clearscrn
   printf("\n\n\n\t\t%sDelete %-35.35s%s", FG_RED, file_arr[selected+scroll].name, RESET);
   printf("\n\n\t\t[A] - Yes\n\t\t[B] - No");
 
